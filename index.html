@@ -335,6 +335,15 @@ h1,h2,.serif{font-family:Fraunces,Georgia,serif;}
 
 }
 
+.list-tools{display:flex;gap:10px;align-items:center;margin:-4px 0 14px;}
+.list-tools input{width:100%;max-width:320px;height:38px;padding:0 11px;border:1px solid var(--border);border-radius:9px;font:12px Inter,Arial,sans-serif;color:var(--ink);}
+.list-tools input:focus{outline:0;border-color:var(--moss);box-shadow:0 0 0 3px #26734f18;}
+.list-count{color:var(--muted);font-size:11px;white-space:nowrap;}
+.backup-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.backup-actions button{min-height:38px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;}
+.backup-actions button:hover{background:var(--moss-soft);}
+@media(max-width:520px){.list-tools{align-items:stretch;flex-direction:column}.list-count{white-space:normal}}
+
 /* Polesan tampilan */
 body{
     background:
@@ -466,6 +475,161 @@ body{
     .tot:last-child{grid-column:1 / -1;}
     .export .danger{margin-left:0;}
 }
+
+/* Finishing touches: clearer hierarchy, calmer surfaces, and consistent controls */
+:root{--border:#dfe8e1;--moss:#246b49;--moss-soft:#eaf4ec;}
+body{background:radial-gradient(ellipse at 88% 3%,rgba(201,227,205,.48),transparent 32%),#f5f7f3;}
+.container{max-width:1080px;}
+.header{min-height:140px;border:1px solid rgba(255,255,255,.14);}
+.header:before{right:110px;top:-160px;}
+.card{border-color:#e5ebe5;box-shadow:0 4px 16px rgba(34,62,43,.045);}
+.card:hover{transform:translateY(-1px);}
+#inputCard{background:linear-gradient(180deg,#fff 0%,#fcfefc 100%);}
+.grp{background:#fafcf9;}
+.grp h3{letter-spacing:.07em;}
+.field input,.settings textarea,#account{background:#fcfdfb!important;}
+.field input:focus,.settings textarea:focus,#account:focus{background:#fff!important;}
+button{font-weight:650;}
+.add-btn,.settings-save,.export .primary{background:linear-gradient(135deg,#2c8057,#216743);}
+.add-btn:hover,.settings-save:hover,.export .primary:hover{background:#1c5c3c;}
+.del{transition:background .16s,border-color .16s,transform .16s;}
+.del:hover{transform:scale(1.06);}
+.tot{border:1px solid rgba(38,115,79,.07);}
+.list-tools input{background:#fcfdfb;}
+.export button,.backup-actions button{box-shadow:0 1px 2px rgba(24,47,31,.035);}
+.stock-link{box-shadow:inset 0 1px rgba(255,255,255,.12);}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid rgba(38,115,79,.28);outline-offset:2px;}
+@media(max-width:600px){
+    .header{min-height:112px;}
+    .card h2{font-size:17px;}
+    .grp{padding:11px;}
+    .tot{min-height:78px;padding:12px;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
+
+/* A more intentional cashier dashboard */
+:root{
+    --ink:#1d3026;
+    --muted:#748177;
+    --border:#e3eae3;
+    --moss:#236b48;
+    --moss-soft:#edf5ee;
+    --amber:#a9681b;
+    --amber-soft:#fff5e5;
+}
+body{
+    background:
+        radial-gradient(ellipse at 5% 9%,rgba(235,225,198,.35),transparent 25%),
+        radial-gradient(ellipse at 94% 4%,rgba(186,218,193,.48),transparent 29%),
+        #f3f6f1;
+}
+.container{max-width:1120px;padding-top:24px;}
+.header{
+    min-height:164px;
+    padding:30px 34px;
+    margin-bottom:18px;
+    border-radius:24px;
+    background:linear-gradient(112deg,#173c2c 0%,#236b48 58%,#3b8058 100%);
+    box-shadow:0 18px 40px rgba(24,67,43,.19);
+}
+.header:before{width:300px;height:300px;right:150px;top:-190px;}
+.header:after{
+    content:"KASIR  ·  OPERASIONAL";
+    letter-spacing:.12em;
+    font-size:9px;
+    padding:10px 14px;
+    border-radius:8px;
+}
+.logo-icon{border-radius:17px;background:#f7fff7;color:#246b49;}
+.logo-title{font-size:28px;letter-spacing:-1px;}
+.logo-sub{font-size:11px;letter-spacing:.04em;}
+.stock-link{
+    border-radius:9px;
+    padding:11px 15px;
+    background:#ffffff17;
+    border-color:#ffffff44;
+    transition:background .18s,transform .18s;
+}
+.stock-link:hover{transform:translateY(-2px);background:#ffffff2b;}
+.card{
+    position:relative;
+    overflow:hidden;
+    padding:23px;
+    border:1px solid #e3eae3;
+    border-radius:15px;
+    box-shadow:0 3px 12px rgba(31,56,38,.035);
+    transition:box-shadow .2s,border-color .2s,transform .2s;
+}
+.card:hover{border-color:#d1dfd2;box-shadow:0 9px 24px rgba(31,56,38,.065);}
+.container > .card:first-of-type{background:linear-gradient(115deg,#fff 0%,#fbfdfb 100%);}
+.container > .settings{background:#fafbf8;}
+#inputCard{border-top:3px solid #28734e;background:#fff;}
+#inputCard h2{font-size:23px;letter-spacing:-.45px;}
+.card h2{font-size:18px;}
+.field label{margin-bottom:7px;color:#5e6d62;font-size:9px;letter-spacing:.095em;}
+.field input,#account,.list-tools input,.settings textarea{
+    border:1px solid #dce5dc!important;
+    border-radius:8px!important;
+    background:#fbfcfa!important;
+}
+.field input:hover,#account:hover,.list-tools input:hover{border-color:#c7d6c8!important;}
+.field input:focus,#account:focus,.list-tools input:focus,.settings textarea:focus{
+    border-color:#29764f!important;
+    background:#fff!important;
+    box-shadow:0 0 0 3px rgba(35,107,72,.11)!important;
+}
+.seg{gap:6px;}
+.seg button{border-radius:7px;padding:9px 13px;color:#566359;}
+.seg button.active{box-shadow:0 3px 8px rgba(25,55,34,.14);}
+.chips{gap:6px;margin-top:9px;}
+.chips button{border-radius:6px;background:#f2f4ed;color:#5a685b;border-color:#e4e9df;}
+.chips button:hover{background:#e6f1e7;}
+.add-btn,.settings-save,.export .primary{
+    border-radius:8px;
+    background:#246b49;
+    box-shadow:0 5px 12px rgba(35,107,72,.18);
+}
+.add-btn{height:42px;padding:0 20px;}
+.add-btn:hover,.settings-save:hover,.export .primary:hover{background:#194f35;}
+.grp{border:1px solid #e4eae3;border-radius:11px;background:#fbfcfa;padding:15px;}
+.grp h3{padding:0 0 10px;margin-bottom:4px;border-bottom:1px solid #e8ede7;font-size:10px;letter-spacing:.12em;color:#45584a;}
+.entry{padding:10px 7px;border-bottom:1px solid #edf0eb;border-radius:5px;font-size:12px;}
+.entry:hover{background:#f1f6f1;}
+.entry .no{width:22px;color:#9aa49a;}
+.entry .pay{font-size:10px;}
+.del{width:24px;height:24px;border-radius:7px;}
+.none{padding:12px 4px;color:#929c92;}
+.totals{gap:12px;}
+.tot{min-height:92px;border:1px solid #dfebe0;border-radius:10px;background:#eef6ef;padding:17px 19px;}
+.tot.warm{border-color:#f0e4cf;background:#fff6e8;}
+.tot .lbl{font-size:9px;letter-spacing:.11em;}
+.tot .val{font-size:26px;letter-spacing:-.5px;}
+.export{gap:9px;}
+.export button,.backup-actions button{border-radius:8px;}
+.export button{height:42px;font-size:11px;}
+.export .danger{margin-left:auto;}
+.backup-actions{gap:9px;}
+.backup-actions button{color:#536257;}
+.settings summary{font-size:13px;}
+.settings summary:after{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#edf4ed;}
+.toast{box-shadow:0 8px 24px rgba(18,37,25,.2);}
+@media(max-width:700px){
+    .container{padding:16px 13px 40px;}
+    .header{min-height:128px;padding:21px 18px;border-radius:17px;}
+    .header:after{display:none;}
+    .logo-title{font-size:21px;}
+    .card{padding:17px;border-radius:13px;}
+    #inputCard h2{font-size:20px;}
+    .tot{min-height:82px;padding:13px;}
+    .tot .val{font-size:21px;}
+}
+@media(max-width:430px){
+    .stock-link{width:100%;justify-content:center;}
+    .header{gap:14px;}
+    .grid{gap:11px;}
+    .seg button{padding:8px 10px;font-size:10px;}
+}
+
 </style>
 </head>
 
@@ -508,13 +672,13 @@ body{
             </div>
 
             <div class="field">
-                <label>TANGGAL</label>
-                <input id="tanggal" type="date" onchange="saveIdent()">
+                <label>TANGGAL LAPORAN / SHIFT</label>
+                <input id="tanggal" type="date" onchange="saveIdent();render()">
             </div>
 
             <div class="field">
                 <label>AKUN / SHIFT</label>
-                <select id="account" onchange="setAccount(this.value)" style="width:100%;height:40px;border:1px solid var(--border);border-radius:9px;padding:0 10px;font-size:13px;background:#fff;color:var(--ink);">
+                <select id="account" onchange="requestAccount(this.value)" style="width:100%;height:40px;border:1px solid var(--border);border-radius:9px;padding:0 10px;font-size:13px;background:#fff;color:var(--ink);">
                     <option value="SIANG">Akun Shift Siang</option>
                     <option value="MALAM">Akun Shift Malam</option>
                     <option value="OWNER">Akun Owner — lihat semua</option>
@@ -522,7 +686,7 @@ body{
             </div>
 
         </div>
-        <p class="settings-note" style="margin:10px 0 0;">Data shift Siang dan Malam dipisah. Akun Owner melihat gabungan keduanya.</p>
+        <p class="settings-note" style="margin:10px 0 0;">Pilih tanggal untuk melihat, mencatat, atau mengunduh data pada tanggal tersebut. Data shift Siang dan Malam dipisah; Owner melihat gabungan semua shift pada tanggal yang dipilih.</p>
 
     </div>
 
@@ -603,6 +767,10 @@ body{
     <div class="card">
 
         <h2 class="serif" id="listTitle">Daftar sesi hari ini</h2>
+        <div class="list-tools">
+            <input id="entrySearch" type="search" placeholder="Cari nama atau PC…" oninput="render()" aria-label="Cari sesi">
+            <span class="list-count" id="entryCount">0 sesi</span>
+        </div>
 
         <div class="cols">
 
@@ -669,6 +837,12 @@ body{
             <button class="danger" id="resetButton" onclick="resetHarian()">🗑 Reset Shift</button>
 
         </div>
+        <div class="backup-actions">
+            <button type="button" onclick="downloadBackup()">💾 Cadangkan data</button>
+            <button type="button" onclick="document.getElementById('backupFile').click()">📂 Pulihkan cadangan</button>
+            <input id="backupFile" type="file" accept="application/json,.json" hidden onchange="restoreBackup(event)">
+        </div>
+        <p class="settings-note" style="margin:9px 0 0">Cadangan berisi data kasir dan pengaturan harga di browser ini. Simpan file di tempat aman.</p>
 
     </div>
 
@@ -682,7 +856,6 @@ body{
 
 <div class="toast" id="toast"></div>
 
-
 <script>
 
 /* ================= DATA ================= */
@@ -692,16 +865,38 @@ let kat  = "REGULER";
 let bayar= "CASH";
 let activeShift = localStorage.getItem("billing_account") || "SIANG";
 if(!["SIANG","MALAM","OWNER"].includes(activeShift)) activeShift = "SIANG";
+const AUTH_KEY = "arena27_local_auth";
+let authData = null;
+let isAuthenticated = false;
+let pendingAccount = "SIANG";
+
+function todayKey(){
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+}
 
 try{
     entries = JSON.parse(localStorage.getItem("billing_entries")) || [];
-    entries.forEach(e => { if(!e.shift) e.shift = "SIANG"; });
+    const legacyDate = localStorage.getItem("billing_tgl");
+    let migrated = false;
+    entries.forEach(e => {
+        if(!e.shift) e.shift = "SIANG";
+        if(!e.date){
+            e.date = legacyDate || todayKey();
+            migrated = true;
+        }
+    });
+    if(migrated){
+        try{ localStorage.setItem("billing_entries", JSON.stringify(entries)); }catch(e){}
+    }
 }catch(e){ entries = []; }
 
 function scopedEntries(){
-    return activeShift === "OWNER"
-        ? entries
-        : entries.filter(e => (e.shift || "SIANG") === activeShift);
+    const selectedDate = document.getElementById("tanggal").value;
+    return entries.filter(e =>
+        e.date === selectedDate &&
+        (activeShift === "OWNER" || (e.shift || "SIANG") === activeShift)
+    );
 }
 
 function setAccount(account){
@@ -716,17 +911,207 @@ function setAccount(account){
     document.getElementById("account").value = activeShift;
     document.getElementById("inputCard").style.display = activeShift === "OWNER" ? "none" : "";
     document.getElementById("resetButton").style.display = activeShift === "OWNER" ? "none" : "";
-    document.getElementById("listTitle").textContent = activeShift === "OWNER"
-        ? "Ringkasan semua shift"
-        : "Daftar sesi hari ini — Shift " + activeShift;
     render();
+}
+
+function requestAccount(account){
+    if(!["SIANG","MALAM","OWNER"].includes(account)) return;
+    if(account === activeShift) return;
+    setAccount(account);
+}
+
+function bytesToHex(bytes){
+    return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2,"0")).join("");
+}
+
+async function credentialHash(password, salt){
+    if(!window.crypto?.subtle) throw new Error("Fitur keamanan browser tidak tersedia.");
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits({name:"PBKDF2",salt:new Uint8Array(salt.match(/../g).map(v=>parseInt(v,16))),iterations:150000,hash:"SHA-256"},key,256);
+    return bytesToHex(bits);
+}
+
+async function makeCredential(value){
+    const salt = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+    return {salt, hash:await credentialHash(value,salt)};
+}
+
+function showSetup(account){
+    const isOwner = account === "OWNER";
+    const shiftName = account === "SIANG" ? "Siang" : "Malam";
+    const panel = document.getElementById("authPanel");
+    panel.innerHTML = `<h2 id="authTitle">${isOwner ? "Buat PIN Owner" : "Buat akun Shift " + shiftName}</h2>
+        <p class="auth-copy">${isOwner ? "Buat PIN Owner 4–8 angka sekarang. PIN ini akan diminta setiap kali Anda memilih akun Owner." : "Buat username dan password untuk akun Shift " + shiftName + ". Kredensial Shift lain dan PIN Owner diatur saat akun tersebut pertama kali dipilih."}</p>
+        <form id="setupAuthForm">
+            ${isOwner ? '<div class="field"><label for="setupSecret">PIN OWNER (4–8 ANGKA)</label><input id="setupSecret" type="password" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" autocomplete="new-password" required></div>' : '<div class="field"><label for="setupUser">USERNAME SHIFT ' + shiftName.toUpperCase() + '</label><input id="setupUser" maxlength="40" autocomplete="username" required></div><div class="field"><label for="setupSecret">PASSWORD SHIFT ' + shiftName.toUpperCase() + ' (MINIMAL 6 KARAKTER)</label><input id="setupSecret" type="password" minlength="6" autocomplete="new-password" required></div>'}
+            <button class="settings-save auth-submit" type="submit">Simpan dan masuk</button>
+            <div class="auth-error" id="authError" role="alert"></div>
+        </form>
+        <p class="auth-copy" style="margin:12px 0 0">Kredensial disimpan sebagai hash di browser ini. Login ini bukan pengamanan server.</p>`;
+    document.getElementById("authOverlay").hidden = false;
+    document.getElementById("setupAuthForm").addEventListener("submit",async event=>{
+        event.preventDefault();
+        const error = document.getElementById("authError");
+        const value = document.getElementById("setupSecret").value;
+        const username = isOwner ? "" : document.getElementById("setupUser").value.trim();
+        if(isOwner && !/^\d{4,8}$/.test(value)){error.textContent="PIN Owner harus terdiri dari 4 sampai 8 angka.";return;}
+        if(!isOwner && username.length < 3){error.textContent="Username harus minimal 3 karakter.";return;}
+        if(!isOwner && ["SIANG","MALAM"].some(shift=>shift!==account&&authData?.[shift]?.username?.toLowerCase()===username.toLowerCase())){error.textContent="Username sudah dipakai shift lainnya.";return;}
+        const submit = event.submitter;
+        submit.disabled = true;
+        error.textContent = "Menyimpan kredensial…";
+        try{
+            const credential = await makeCredential(value);
+            authData = {...(authData || {}),[account]:{username,...credential}};
+            localStorage.setItem(AUTH_KEY,JSON.stringify(authData));
+            setAccount(account);
+            toast(isOwner ? "PIN Owner berhasil dibuat." : "Akun Shift " + shiftName + " berhasil dibuat.");
+        }catch(error){
+            submit.disabled = false;
+            document.getElementById("authError").textContent = error.message || "Gagal menyimpan kredensial di browser.";
+        }
+    });
+}
+
+function showLogin(account){
+    const isOwner = account === "OWNER";
+    const panel = document.getElementById("authPanel");
+    panel.innerHTML = `<h2 id="authTitle">Login ${isOwner ? "Owner" : "Shift " + (account === "SIANG" ? "Siang" : "Malam")}</h2>
+        <p class="auth-copy">${isOwner ? "Masukkan PIN Owner untuk melihat ringkasan semua shift." : "Masukkan username dan password akun shift ini."}</p>
+        <form id="loginForm">
+            ${isOwner ? '<div class="field"><label for="loginSecret">PIN OWNER</label><input id="loginSecret" type="password" inputmode="numeric" maxlength="8" autocomplete="current-password" required></div>' : '<div class="field"><label for="loginUser">USERNAME</label><input id="loginUser" autocomplete="username" required></div><div class="field"><label for="loginSecret">PASSWORD</label><input id="loginSecret" type="password" autocomplete="current-password" required></div>'}
+            <button class="settings-save auth-submit" type="submit">Masuk</button>
+            ${isAuthenticated ? '<button class="auth-cancel" id="cancelLogin" type="button">Batal</button>' : ""}
+            <div class="auth-error" id="authError" role="alert"></div>
+        </form>
+        <p class="auth-copy" style="margin:12px 0 0">Akses ini tersimpan hanya di browser ini dan bukan perlindungan server.</p>`;
+    document.getElementById("authOverlay").hidden = false;
+    const secret = document.getElementById("loginSecret");
+    if(isOwner) secret.focus(); else document.getElementById("loginUser").focus();
+    document.getElementById("loginForm").addEventListener("submit",async event=>{
+        event.preventDefault();
+        const error = document.getElementById("authError");
+        const submit = event.submitter;
+        submit.disabled = true;
+        try{
+            const saved = authData?.[account];
+            const usernameOk = isOwner || document.getElementById("loginUser").value.trim().toLowerCase() === saved?.username?.toLowerCase();
+            const hash = saved ? await credentialHash(secret.value,saved.salt) : "";
+            if(!saved || !usernameOk || hash !== saved.hash){
+                error.textContent = isOwner ? "PIN Owner tidak cocok." : "Username atau password tidak cocok.";
+                submit.disabled = false;
+                secret.value = "";
+                secret.focus();
+                return;
+            }
+            setAccount(account);
+        }catch(error){
+            submit.disabled = false;
+            document.getElementById("authError").textContent = error.message || "Login gagal.";
+        }
+    });
+    document.getElementById("cancelLogin")?.addEventListener("click",()=>{
+        document.getElementById("authOverlay").hidden = true;
+        document.getElementById("account").value = activeShift;
+    });
+}
+
+function showLogin(account){
+    const isOwner = account === "OWNER";
+    const panel = document.getElementById("authPanel");
+    panel.innerHTML = `<h2 id="authTitle">Login ${isOwner ? "Owner" : "Shift " + (account === "SIANG" ? "Siang" : "Malam")}</h2>
+        <p class="auth-copy">${isOwner ? "Masukkan PIN Owner untuk melihat ringkasan semua shift." : "Masukkan username dan password akun shift ini."}</p>
+        <form id="loginForm">
+            ${isOwner ? '<div class="field"><label for="loginSecret">PIN OWNER</label><input id="loginSecret" type="password" inputmode="numeric" maxlength="8" autocomplete="current-password" required></div>' : '<div class="field"><label for="loginUser">USERNAME</label><input id="loginUser" autocomplete="username" required></div><div class="field"><label for="loginSecret">PASSWORD</label><input id="loginSecret" type="password" autocomplete="current-password" required></div>'}
+            <button class="settings-save auth-submit" type="submit">Masuk</button>
+            ${isAuthenticated ? '<button class="auth-cancel" id="cancelLogin" type="button">Batal</button>' : ""}
+            <div class="auth-error" id="authError" role="alert"></div>
+        </form>
+        <p class="auth-copy" style="margin:12px 0 0">Akses ini tersimpan hanya di browser ini dan bukan perlindungan server.</p>`;
+    document.getElementById("authOverlay").hidden = false;
+    const secret = document.getElementById("loginSecret");
+    if(isOwner) secret.focus(); else document.getElementById("loginUser").focus();
+    document.getElementById("loginForm").addEventListener("submit",async event=>{
+        event.preventDefault();
+        const error = document.getElementById("authError");
+        const submit = event.submitter;
+        submit.disabled = true;
+        try{
+            const saved = authData?.[account];
+            const usernameOk = isOwner || document.getElementById("loginUser").value.trim().toLowerCase() === saved?.username?.toLowerCase();
+            const hash = saved ? await credentialHash(secret.value,saved.salt) : "";
+            if(!saved || !usernameOk || hash !== saved.hash){
+                error.textContent = isOwner ? "PIN Owner tidak cocok." : "Username atau password tidak cocok.";
+                submit.disabled = false;
+                secret.value = "";
+                secret.focus();
+                return;
+            }
+            setAccount(account);
+        }catch(error){
+            submit.disabled = false;
+            document.getElementById("authError").textContent = error.message || "Login gagal.";
+        }
+    });
+    document.getElementById("cancelLogin")?.addEventListener("click",()=>{
+        document.getElementById("authOverlay").hidden = true;
+        document.getElementById("account").value = activeShift;
+    });
+}
+
+function showCredentialChange(){
+    const isOwner = activeShift === "OWNER";
+    const panel = document.getElementById("authPanel");
+    panel.innerHTML = `<h2 id="authTitle">Ubah kredensial ${isOwner ? "Owner" : "Shift " + (activeShift === "SIANG" ? "Siang" : "Malam")}</h2>
+        <p class="auth-copy">Perubahan berlaku untuk akun yang sedang login ini saja. Pastikan kredensial baru tersimpan.</p>
+        <form id="changeAuthForm">
+            ${isOwner ? '<div class="field"><label for="newCredential">PIN BARU (4–8 ANGKA)</label><input id="newCredential" type="password" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" required></div>' : '<div class="field"><label for="newUsername">USERNAME BARU</label><input id="newUsername" maxlength="40" autocomplete="username" required></div><div class="field"><label for="newCredential">PASSWORD BARU (MINIMAL 6 KARAKTER)</label><input id="newCredential" type="password" minlength="6" autocomplete="new-password" required></div>'}
+            <button class="settings-save auth-submit" type="submit">Simpan perubahan</button>
+            <button class="auth-cancel" id="cancelCredentialChange" type="button">Batal</button>
+            <div class="auth-error" id="authError" role="alert"></div>
+        </form>`;
+    document.getElementById("authOverlay").hidden = false;
+    document.getElementById("changeAuthForm").addEventListener("submit",async event=>{
+        event.preventDefault();
+        const error = document.getElementById("authError");
+        const value = document.getElementById("newCredential").value;
+        const username = isOwner ? "" : document.getElementById("newUsername").value.trim();
+        if(isOwner && !/^\d{4,8}$/.test(value)){error.textContent="PIN harus terdiri dari 4 sampai 8 angka.";return;}
+        if(!isOwner && username.length < 3){error.textContent="Username harus minimal 3 karakter.";return;}
+        if(!isOwner && ["SIANG","MALAM"].some(shift=>shift!==activeShift&&authData[shift]?.username?.toLowerCase()===username.toLowerCase())){error.textContent="Username sudah dipakai shift lainnya.";return;}
+        const submit = event.submitter;
+        submit.disabled = true;
+        try{
+            const next={...authData,[activeShift]:{username,...await makeCredential(value)}};
+            localStorage.setItem(AUTH_KEY,JSON.stringify(next));
+            authData=next;
+            document.getElementById("authOverlay").hidden = true;
+            toast("Kredensial berhasil diperbarui.");
+        }catch(error){
+            submit.disabled = false;
+            document.getElementById("authError").textContent=error.message||"Gagal menyimpan kredensial.";
+        }
+    });
+    document.getElementById("cancelCredentialChange").addEventListener("click",()=>{
+        document.getElementById("authOverlay").hidden = true;
+    });
+}
+
+function startAuthentication(){
+    try{authData=JSON.parse(localStorage.getItem(AUTH_KEY)||"null");}catch(error){authData=null;}
+    if(!authData || typeof authData !== "object") authData={};
+    pendingAccount=activeShift;
+    if(!authData[activeShift]) showSetup(activeShift);
+    else showLogin(activeShift);
 }
 
 function saveAll(){
     try{
         localStorage.setItem("billing_entries", JSON.stringify(entries));
+        return true;
     }catch(e){
-        alert("Gagal menyimpan. Copy laporan dulu sebelum tutup!");
+        alert("Gagal menyimpan. Data belum diperbarui di browser.");
+        return false;
     }
 }
 
@@ -766,6 +1151,10 @@ function savePrices(){
         const value = document.getElementById("price" + k).value;
         defaults[k] = value === "" ? null : Number(value);
     });
+    if(Object.values(defaults).some(value=>value!==null&&(!Number.isFinite(value)||value<0))){
+        alert("Harga default harus berupa angka nol atau lebih.");
+        return;
+    }
 
     const pc = {};
     const lines = document.getElementById("pcPrices").value.split(/\n/);
@@ -776,14 +1165,21 @@ function savePrices(){
             alert("Format harga PC belum benar. Gunakan NAMA PC=HARGA, satu PC per baris.");
             return;
         }
-        pc[match[1].trim().toUpperCase()] = Number(match[2]);
+        const price = Number(match[2]);
+        if(!match[1].trim() || !Number.isFinite(price)){
+            alert("Nama PC dan harga harus diisi dengan benar.");
+            return;
+        }
+        pc[match[1].trim().toUpperCase()] = price;
     }
 
+    const previous = priceSettings;
     priceSettings = {defaults, pc};
     try{
         localStorage.setItem("billing_prices", JSON.stringify(priceSettings));
         toast("Pengaturan harga berhasil disimpan.");
     }catch(e){
+        priceSettings = previous;
         alert("Pengaturan gagal disimpan di browser.");
     }
 }
@@ -851,8 +1247,8 @@ function addEntry(){
     const nominal = Number(document.getElementById("nominal").value);
     
 
-        if(!nama || nominal <= 0){
-        alert("Isi nama/PC dan nominal dulu.");
+        if(!nama || !Number.isFinite(nominal) || nominal <= 0 || !document.getElementById("tanggal").value){
+        alert("Isi tanggal, nama/PC, dan nominal dengan benar.");
         return;
     }
 
@@ -861,13 +1257,16 @@ function addEntry(){
         id: Date.now() + "" + Math.floor(Math.random()*999),
         kat,
         shift: activeShift,
+        date: document.getElementById("tanggal").value,
         nama,
         nominal,
         bayarM: bayar
     });
 
-    saveAll();
-
+    if(!saveAll()){
+        entries.pop();
+        return;
+    }
 
     document.getElementById("nama").value    = "";
     document.getElementById("nominal").value = "";
@@ -881,13 +1280,12 @@ function addEntry(){
 
 
 function delEntry(id){
-
+    const entry = entries.find(e => e.id === id);
+    if(!entry || !confirm(`Hapus sesi ${entry.nama} senilai ${fmt(entry.nominal)}?`)) return;
+    const previous = entries;
     entries = entries.filter(e => e.id !== id);
-
-    saveAll();
-
+    if(!saveAll()) entries = previous;
     render();
-
 }
 
 /* ================= KEMBALIAN ================= */
@@ -926,7 +1324,7 @@ function tanggalLabel(){
 
     const d = new Date(v + "T00:00:00");
 
-    return d.toLocaleDateString("id-ID",{day:"2-digit",month:"long"}).toUpperCase();
+    return d.toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"}).toUpperCase();
 
 }
 
@@ -935,11 +1333,22 @@ function tanggalLabel(){
 function render(){
 
     const shownEntries = scopedEntries();
+    document.getElementById("listTitle").textContent = activeShift === "OWNER"
+        ? "Ringkasan semua shift — " + tanggalLabel()
+        : "Daftar sesi — " + tanggalLabel() + " · Shift " + activeShift;
+
+    const search = document.getElementById("entrySearch").value.trim().toLocaleLowerCase("id-ID");
+    const visibleEntries = search
+        ? shownEntries.filter(e => String(e.nama).toLocaleLowerCase("id-ID").includes(search))
+        : shownEntries;
+    document.getElementById("entryCount").textContent = search
+        ? `${visibleEntries.length} dari ${shownEntries.length} sesi`
+        : `${shownEntries.length} sesi`;
 
     ["REGULER","VIP","VVIP"].forEach(k => {
 
         const box  = document.getElementById("list" + k);
-        const list = shownEntries.filter(e => e.kat === k);
+        const list = visibleEntries.filter(e => e.kat === k);
 
 
         box.innerHTML = list.length === 0
@@ -1234,28 +1643,36 @@ function resetHarian(){
 
     if(activeShift === "OWNER") return;
     const shiftEntries = scopedEntries();
+    const selectedDate = document.getElementById("tanggal").value;
 
     if(shiftEntries.length === 0){
-        alert("Belum ada data.");
+        alert("Belum ada data pada tanggal yang dipilih.");
         return;
     }
 
 
     if(
         confirm(
-            "Reset data shift " + activeShift + " hari ini?\n\n" +
+            "Reset data shift " + activeShift + " tanggal " + tanggalLabel() + "?\n\n" +
+            "Hanya data pada tanggal yang dipilih yang akan dihapus.\n" +
             "PASTIKAN laporan shift sudah di-copy / diunduh dulu.\n" +
             "OK untuk reset, Batal untuk batal."
         )
     ){
 
-        entries = entries.filter(e => (e.shift || "SIANG") !== activeShift);
+        const previous = entries;
+        entries = entries.filter(e =>
+            (e.shift || "SIANG") !== activeShift || e.date !== selectedDate
+        );
 
-        saveAll();
+        if(!saveAll()){
+            entries = previous;
+            render();
+            return;
+        }
 
         render();
-
-        toast("Data shift " + activeShift + " dikosongkan.");
+        toast("Data shift " + activeShift + " tanggal " + tanggalLabel() + " dikosongkan.");
 
     }
 
@@ -1280,6 +1697,78 @@ function toast(msg){
 }
 
 
+function downloadBackup(){
+    const backup = {
+        app:"ARENA 27 NET KASIR",
+        version:1,
+        exportedAt:new Date().toISOString(),
+        entries,
+        prices:priceSettings,
+        staff:{
+            SIANG:localStorage.getItem("billing_staff_SIANG") || "",
+            MALAM:localStorage.getItem("billing_staff_MALAM") || ""
+        }
+    };
+    const blob = new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `cadangan-kasir-arena27-${todayKey()}.json`;
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+    toast("Cadangan kasir berhasil diunduh.");
+}
+
+async function restoreBackup(event){
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if(!file) return;
+    try{
+        const backup = JSON.parse(await file.text());
+        if(backup.app !== "ARENA 27 NET KASIR" || backup.version !== 1 || !Array.isArray(backup.entries) || !backup.prices || typeof backup.prices !== "object"){
+            throw new Error("File bukan cadangan kasir Arena 27 Net yang valid.");
+        }
+        const validEntries = backup.entries.every(entry => entry &&
+            ["REGULER","VIP","VVIP"].includes(entry.kat) &&
+            ["CASH","QRIS"].includes(entry.bayarM) &&
+            typeof entry.nama === "string" && Number.isFinite(Number(entry.nominal)) && Number(entry.nominal) > 0 &&
+            /^\d{4}-\d{2}-\d{2}$/.test(entry.date) && ["SIANG","MALAM"].includes(entry.shift || "SIANG"));
+        const defaults = backup.prices.defaults && typeof backup.prices.defaults === "object" && !Array.isArray(backup.prices.defaults) ? backup.prices.defaults : {};
+        const pc = backup.prices.pc && typeof backup.prices.pc === "object" && !Array.isArray(backup.prices.pc) ? backup.prices.pc : {};
+        const validPrices = Object.values(defaults).every(value=>value===null||(Number.isFinite(Number(value))&&Number(value)>=0)) &&
+            Object.entries(pc).every(([name,value])=>name.trim()&&Number.isFinite(Number(value))&&Number(value)>=0);
+        if(!validEntries) throw new Error("Ada data sesi yang tidak valid di file cadangan.");
+        if(!validPrices) throw new Error("Pengaturan harga pada file cadangan tidak valid.");
+        if(!confirm(`Pulihkan ${backup.entries.length} sesi dan pengaturan harga dari file ini? Data kasir saat ini akan diganti.`)) return;
+
+        const oldEntries = entries;
+        const oldPrices = priceSettings;
+        const storageKeys = ["billing_entries","billing_prices","billing_staff_SIANG","billing_staff_MALAM"];
+        const oldStorage = Object.fromEntries(storageKeys.map(key=>[key,localStorage.getItem(key)]));
+        entries = backup.entries.map(entry=>({...entry,shift:entry.shift || "SIANG"}));
+        priceSettings = {defaults,pc};
+        try{
+            localStorage.setItem("billing_entries",JSON.stringify(entries));
+            localStorage.setItem("billing_prices",JSON.stringify(priceSettings));
+            ["SIANG","MALAM"].forEach(shift=>localStorage.setItem("billing_staff_"+shift,String(backup.staff?.[shift] || "")));
+        }catch(error){
+            entries = oldEntries;
+            priceSettings = oldPrices;
+            storageKeys.forEach(key=>{
+                try{
+                    if(oldStorage[key]===null) localStorage.removeItem(key);
+                    else localStorage.setItem(key,oldStorage[key]);
+                }catch(rollbackError){}
+            });
+            throw new Error("Gagal menyimpan pemulihan di browser. Data aktif dipertahankan sebisa mungkin.");
+        }
+        initPrices();
+        render();
+        toast("Cadangan berhasil dipulihkan.");
+    }catch(error){
+        alert(error.message || "File cadangan tidak dapat dibaca.");
+    }
+}
+
 /* ================= START ================= */
 
 document.getElementById("staff").value = activeShift === "OWNER"
@@ -1288,8 +1777,7 @@ document.getElementById("staff").value = activeShift === "OWNER"
        (activeShift === "SIANG" ? localStorage.getItem("billing_staff") : "") || "");
 
 document.getElementById("tanggal").value =
-    localStorage.getItem("billing_tgl") ||
-    new Date().toISOString().slice(0,10);
+    localStorage.getItem("billing_tgl") || todayKey();
 
 initPrices();
 renderChips();
