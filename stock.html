@@ -180,6 +180,32 @@ details.sub[open] summary:after{content:"−";}
 tfoot td{font-weight:700;background:#f7f9f6;border-top:1px solid #e3eae3;}
 .num{text-align:right;}
 @media(max-width:700px){.span2{grid-column:1/-1;}}
+
+/* Final layout polish and small-screen usability */
+html{scroll-behavior:smooth;}
+.container{width:min(100%,1120px);}
+.card h2{line-height:1.3;}
+.field input,.field select,.stepper input{min-width:0;}
+.table-wrap{overscroll-behavior-x:contain;}
+.table-wrap table{margin:0;}
+.actions{align-items:center;}
+.note{max-width:78ch;}
+#rokokMasterForm .ghost{white-space:nowrap;}
+@media(max-width:560px){
+    .form-grid{grid-template-columns:1fr;}
+    .span2{grid-column:auto;}
+    .header{align-items:flex-start;}
+    .brand{align-items:flex-start;}
+    .header .back{width:100%;text-align:center;}
+    .stats{grid-template-columns:1fr 1fr;}
+    .stat:last-child{grid-column:1/-1;}
+    .card{padding:15px;}
+    .rk-total{gap:8px 12px;}
+    .pills{gap:6px;}
+    .pill{line-height:1.5;}
+    .actions .small-btn{flex:1;}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
 </style>
 </head>
 <body>
@@ -228,7 +254,7 @@ tfoot td{font-weight:700;background:#f7f9f6;border-top:1px solid #e3eae3;}
 
         <form id="rokokForm" class="form-grid">
             <div class="field span2"><label for="rokokName">MEREK ROKOK</label><input id="rokokName" list="rokokList" maxlength="60" autocomplete="off" placeholder="Ketik atau pilih merek…" required><datalist id="rokokList"></datalist></div>
-            <div class="field"><label>SATUAN</label><div class="seg" id="rkUnitSeg"><button type="button" data-unit="BATANG" class="active">Batang</button><button type="button" data-unit="BUNGKUS">Bungkus</button></div></div>
+            <div class="field"><label>SATUAN</label><div class="seg" id="rkUnitSeg"><button type="button" data-unit="BATANG" class="active">Batang</button><button type="button" data-unit="BUNGKUS">Bungkus</button><!-- Conditional half-pack button --><button type="button" data-unit="SETENGAH_BUNGKUS" id="rkHalfPackBtn" style="display:none;">½ Bks</button></div></div>
             <div class="field"><label for="rokokQty">JUMLAH</label><div class="stepper"><button type="button" data-step="-1" aria-label="Kurangi jumlah">−</button><input id="rokokQty" type="number" min="1" step="1" value="1" required><button type="button" data-step="1" aria-label="Tambah jumlah">+</button></div></div>
             <div class="field"><label for="rokokPrice">HARGA / <span id="rkUnitLabel">BATANG</span></label><input id="rokokPrice" type="number" min="1" step="1" placeholder="Harga satuan" required></div>
             <div class="field"><label>PEMBAYARAN</label><div class="seg" id="rkMethodSeg"><button type="button" data-method="CASH" class="cash active">CASH</button><button type="button" data-method="QRIS" class="qris">QRIS</button></div></div>
@@ -242,24 +268,25 @@ tfoot td{font-weight:700;background:#f7f9f6;border-top:1px solid #e3eae3;}
         <details class="sub" open>
             <summary>Rekap rokok hari ini</summary>
             <div class="sub-body">
-                <div class="table-wrap"><table><thead><tr><th>MEREK</th><th class="num">BATANG</th><th class="num">BUNGKUS</th><th class="num">CASH</th><th class="num">QRIS</th><th class="num">TOTAL</th></tr></thead><tbody id="rkRecapList"></tbody><tfoot id="rkRecapFoot"></tfoot></table></div>
+                <div class="table-wrap"><table><thead><tr><th>MEREK</th><th class="num">BATANG</th><th class="num">½ BKS</th><th class="num">BUNGKUS</th><th class="num">CASH</th><th class="num">QRIS</th><th class="num">TOTAL</th></tr></thead><tbody id="rkRecapList"></tbody><tfoot id="rkRecapFoot"></tfoot></table></div>
             </div>
         </details>
 
-        <details class="sub" id="rkMasterDetails">
-            <summary>Daftar merek, harga &amp; stok rokok</summary>
+        <details class="sub" id="rkMasterDetails" open>
+            <summary>Tambah produk rokok · Daftar merek, harga &amp; stok</summary>
             <div class="sub-body">
                 <form id="rokokMasterForm" class="form-grid">
                     <div class="field span2"><label for="rmName">NAMA MEREK</label><input id="rmName" maxlength="60" placeholder="Contoh: Sampoerna Mild" required></div>
                     <div class="field"><label for="rmIsi">ISI BATANG / BUNGKUS</label><input id="rmIsi" type="number" min="1" max="100" step="1" value="16" required></div>
                     <div class="field"><label for="rmBatang">HARGA / BATANG</label><input id="rmBatang" type="number" min="1" step="1" placeholder="2000"></div>
                     <div class="field"><label for="rmBungkus">HARGA / BUNGKUS</label><input id="rmBungkus" type="number" min="1" step="1" placeholder="32000"></div>
+                    <div class="field"><label for="rmSetengah">HARGA / ½ BUNGKUS</label><input id="rmSetengah" type="number" min="1" step="1" placeholder="Opsional"></div>
                     <div class="field"><label for="rmStok">TAMBAH STOK (BUNGKUS)</label><input id="rmStok" type="number" min="0" step="1" placeholder="Opsional"></div>
                     <button class="btn" type="submit" id="rmSubmit">Simpan merek</button>
                     <button class="ghost" type="button" id="rmCancel" hidden>Batal edit</button>
                 </form>
                 <p class="note" style="margin-bottom:12px">Kalau merek sudah ada, harga &amp; isi diperbarui dan stoknya ditambahkan. Kosongkan stok kalau tidak mau menghitung stok merek itu. Tanda stok menipis memakai batas di "Daftar stok" (dihitung dalam bungkus).</p>
-                <div class="table-wrap"><table><thead><tr><th>MEREK</th><th>ISI</th><th>HARGA / BTG</th><th>HARGA / BKS</th><th>STOK</th><th style="text-align:right">AKSI</th></tr></thead><tbody id="rokokMasterList"></tbody></table></div>
+                <div class="table-wrap"><table><thead><tr><th>MEREK</th><th>ISI</th><th>HARGA / BTG</th><th>HARGA / ½ BKS</th><th>HARGA / BKS</th><th>STOK</th><th style="text-align:right">AKSI</th></tr></thead><tbody id="rokokMasterList"></tbody></table></div>
             </div>
         </details>
     </section>
@@ -308,6 +335,7 @@ const LOW_STOCK_KEY = "arena27_low_stock_limit";
 const ROKOK_KEY = "arena27_rokok_master";
 const LEGACY_ROKOK_LIST_KEY = "arena27_rokok_list";
 const DEFAULT_ISI = 16;
+const ENABLE_HALF_PACKS = true; // Enable half-pack sales
 const CASH_NOTES = [2000,5000,10000,20000,50000,100000];
 const savedLowStock = localStorage.getItem(LOW_STOCK_KEY);
 let lowStockLimit = savedLowStock === null ? 3 : Number(savedLowStock);
@@ -342,6 +370,7 @@ function normalizeRokok(list){
             isi:Number.isInteger(isi)&&isi>0&&isi<=100?isi:DEFAULT_ISI,
             hargaBatang:priceOrNull(src.hargaBatang),
             hargaBungkus:priceOrNull(src.hargaBungkus),
+            hargaSetengah:priceOrNull(src.hargaSetengah),
             stok:Number.isInteger(stok)&&stok>=0?stok:null
         });
     });
@@ -363,7 +392,7 @@ try {
         data.sales.forEach(sale=>{
             if(!sale.isRokok||!String(sale.name||"").trim())return;
             let r=rokok.find(x=>sameName(x.name,sale.name));
-            if(!r){r={id:newId(),name:String(sale.name).trim(),isi:DEFAULT_ISI,hargaBatang:null,hargaBungkus:null,stok:null};rokok.push(r);}
+            if(!r){r={id:newId(),name:String(sale.name).trim(),isi:DEFAULT_ISI,            hargaBatang:null,hargaBungkus:null,hargaSetengah:null,stok:null};rokok.push(r);}
             if(priceOrNull(sale.price))r.hargaBungkus=Number(sale.price);
         });
         if(rokok.length) try { localStorage.setItem(ROKOK_KEY, JSON.stringify(rokok)); } catch (error) {}
@@ -413,8 +442,8 @@ function localDateKey(date=new Date()){
 
 /* ---------- helper rokok ---------- */
 function findRokok(name){return String(name).trim()?rokok.find(r=>sameName(r.name,name)):undefined;}
-function saleUnit(sale){return sale.unit==="BATANG"?"BATANG":"BUNGKUS";}
-function unitShort(unit){return unit==="BATANG"?"btg":"bks";}
+function saleUnit(sale){return sale.unit==="BATANG"?"BATANG":(sale.unit==="SETENGAH_BUNGKUS"?"SETENGAH_BUNGKUS":"BUNGKUS");}
+function unitShort(unit){return unit==="BATANG"?"btg":(unit==="SETENGAH_BUNGKUS"?"½bks":"bks");}
 function qtyLabel(sale){
     return sale.isRokok?`${num(sale.qty)} ${unitShort(saleUnit(sale))}`:num(sale.qty);
 }
@@ -425,7 +454,12 @@ function fmtStok(r){
     return [bks?`${bks} bks`:"",btg?`${btg} btg`:""].filter(Boolean).join(" ");
 }
 function isLowRokok(r){return r.stok!==null&&r.stok<=lowStockLimit*r.isi;}
-function storedPrice(r,unit){return r?(unit==="BATANG"?r.hargaBatang:r.hargaBungkus):null;}
+function storedPrice(r,unit){
+    if(!r)return null;
+    if(unit==="BATANG")return r.hargaBatang;
+    if(unit==="SETENGAH_BUNGKUS")return r.hargaSetengah??(r.hargaBungkus!==null?Math.round(r.hargaBungkus/2):(r.hargaBatang!==null?Math.round(r.hargaBatang*r.isi/2):null));
+    return r.hargaBungkus;
+}
 function saleTag(sale){return sale.isRokok?' <span class="tag">(rokok)</span>':"";}
 
 function render(){
@@ -487,12 +521,13 @@ function renderRokok(todaysSales){
     const rkToday=todaysSales.filter(s=>s.isRokok);
     const omzet=rkToday.reduce((sum,s)=>sum+Number(s.total||0),0);
     const btg=rkToday.filter(s=>saleUnit(s)==="BATANG").reduce((sum,s)=>sum+Number(s.qty||0),0);
+    const half=rkToday.filter(s=>saleUnit(s)==="SETENGAH_BUNGKUS").reduce((sum,s)=>sum+Number(s.qty||0),0);
     const bks=rkToday.filter(s=>saleUnit(s)==="BUNGKUS").reduce((sum,s)=>sum+Number(s.qty||0),0);
     const groups=new Map();
     rkToday.forEach(s=>{
         const key=String(s.name).trim().toLocaleLowerCase("id-ID");
-        const g=groups.get(key)||{name:s.name,btg:0,bks:0,cash:0,qris:0,total:0};
-        if(saleUnit(s)==="BATANG")g.btg+=Number(s.qty||0);else g.bks+=Number(s.qty||0);
+        const g=groups.get(key)||{name:s.name,btg:0,half:0,bks:0,cash:0,qris:0,total:0};
+        if(saleUnit(s)==="BATANG")g.btg+=Number(s.qty||0);else if(saleUnit(s)==="SETENGAH_BUNGKUS")g.half+=Number(s.qty||0);else g.bks+=Number(s.qty||0);
         if(s.method==="QRIS")g.qris+=Number(s.total||0);else g.cash+=Number(s.total||0);
         g.total+=Number(s.total||0);
         groups.set(key,g);
@@ -501,17 +536,17 @@ function renderRokok(todaysSales){
     const lowCount=rokok.filter(isLowRokok).length;
     document.getElementById("rkPills").innerHTML=
         `<span class="pill money">Omzet rokok hari ini <b>${money(omzet)}</b></span>`+
-        `<span class="pill"><b>${num(btg)}</b> batang · <b>${num(bks)}</b> bungkus</span>`+
+        `<span class="pill"><b>${num(btg)}</b> batang · <b>${num(half)}</b> setengah bungkus · <b>${num(bks)}</b> bungkus</span>`+
         `<span class="pill"><b>${num(rkToday.length)}</b> transaksi</span>`+
         (recap.length?`<span class="pill">Terlaris: <b>${esc(recap[0].name)}</b></span>`:"")+
         (lowCount?`<span class="pill alert">⚠ <b>${lowCount}</b> merek stok menipis</span>`:"");
 
     document.getElementById("rkRecapList").innerHTML=recap.length
-        ? recap.map(g=>`<tr><td><strong>${esc(g.name)}</strong></td><td class="num">${num(g.btg)}</td><td class="num">${num(g.bks)}</td><td class="num">${money(g.cash)}</td><td class="num">${money(g.qris)}</td><td class="num"><strong>${money(g.total)}</strong></td></tr>`).join("")
-        : '<tr><td colspan="6" class="empty">Belum ada penjualan rokok hari ini.</td></tr>';
+        ? recap.map(g=>`<tr><td><strong>${esc(g.name)}</strong></td><td class="num">${num(g.btg)}</td><td class="num">${num(g.half)}</td><td class="num">${num(g.bks)}</td><td class="num">${money(g.cash)}</td><td class="num">${money(g.qris)}</td><td class="num"><strong>${money(g.total)}</strong></td></tr>`).join("")
+        : '<tr><td colspan="7" class="empty">Belum ada penjualan rokok hari ini.</td></tr>';
     const sumCash=recap.reduce((s,g)=>s+g.cash,0), sumQris=recap.reduce((s,g)=>s+g.qris,0);
     document.getElementById("rkRecapFoot").innerHTML=recap.length
-        ? `<tr><td>TOTAL</td><td class="num">${num(btg)}</td><td class="num">${num(bks)}</td><td class="num">${money(sumCash)}</td><td class="num">${money(sumQris)}</td><td class="num">${money(omzet)}</td></tr>`
+        ? `<tr><td>TOTAL</td><td class="num">${num(btg)}</td><td class="num">${num(half)}</td><td class="num">${num(bks)}</td><td class="num">${money(sumCash)}</td><td class="num">${money(sumQris)}</td><td class="num">${money(omzet)}</td></tr>`
         : "";
 
     document.getElementById("rokokMasterList").innerHTML=rokok.length
@@ -519,11 +554,12 @@ function renderRokok(todaysSales){
             <td><strong>${esc(r.name)}</strong></td>
             <td>${r.isi} btg</td>
             <td>${r.hargaBatang?money(r.hargaBatang):"—"}</td>
+            <td>${r.hargaSetengah?money(r.hargaSetengah):"—"}</td>
             <td>${r.hargaBungkus?money(r.hargaBungkus):"—"}</td>
             <td class="${isLowRokok(r)?"low":""}">${esc(fmtStok(r))}${isLowRokok(r)&&r.stok>0?" · menipis":""}</td>
             <td><div class="actions"><button class="small-btn" type="button" data-act="edit" data-id="${esc(r.id)}">Edit</button><button class="small-btn" type="button" data-act="stok" data-id="${esc(r.id)}">Koreksi stok</button><button class="small-btn delete" type="button" data-act="del" data-id="${esc(r.id)}">Hapus</button></div></td>
         </tr>`).join("")
-        : '<tr><td colspan="6" class="empty">Belum ada merek. Merek otomatis masuk ke sini saat pertama kali dicatat, atau tambahkan lewat form di atas.</td></tr>';
+        : '<tr><td colspan="7" class="empty">Belum ada merek. Tambahkan lewat form di atas.</td></tr>';
 
     updateRkSummary();
 }
@@ -540,14 +576,33 @@ function rkEls(){
 function applyStoredPrice(force){
     const el=rkEls();
     const price=storedPrice(findRokok(el.name.value),rkUnit);
-    if(price){el.price.value=price;rkPriceAuto=true;}
+    if(price){el.price.value=Number(price)||"";rkPriceAuto=true;} // Ensure it's a number
     else if(rkPriceAuto||force){el.price.value="";rkPriceAuto=false;}
 }
+// Helper to manage unit selection, now including conditional half-pack logic
 function syncRokokForm(){
-    document.querySelectorAll("#rkUnitSeg button").forEach(b=>b.classList.toggle("active",b.dataset.unit===rkUnit));
-    document.querySelectorAll("#rkMethodSeg button").forEach(b=>b.classList.toggle("active",b.dataset.method===rkMethod));
-    document.getElementById("rkUnitLabel").textContent=rkUnit;
-    document.getElementById("rkPaidField").style.display=rkMethod==="CASH"?"":"none";
+    // Show/hide half-pack button based on feature flag and selected rokok
+    const halfBtn = document.getElementById("rkHalfPackBtn");
+    const r = findRokok(document.getElementById("rokokName").value);
+    const showHalf = ENABLE_HALF_PACKS && (r?.isi||DEFAULT_ISI) % 2 === 0; // Half packs require an even pack size
+    halfBtn.style.display = showHalf ? "" : "none";
+    if(!showHalf&&rkUnit==="SETENGAH_BUNGKUS"){
+        rkUnit="BATANG";
+        applyStoredPrice(true);
+    }
+
+    // Update active state for all buttons
+    document.querySelectorAll("#rkUnitSeg button").forEach(b => {
+        b.classList.toggle("active", b.dataset.unit === rkUnit);
+    });
+    document.querySelectorAll("#rkMethodSeg button").forEach(b => {
+        b.classList.toggle("active", b.dataset.method === rkMethod);
+    });
+
+    // Update UI elements affected by unit change
+    const labelMap = {"BATANG": "BATANG", "BUNGKUS": "BUNGKUS", "SETENGAH_BUNGKUS": "½ BKS"};
+    document.getElementById("rkUnitLabel").textContent = labelMap[rkUnit] || rkUnit;
+    document.getElementById("rkPaidField").style.display = rkMethod === "CASH" ? "" : "none";
     updateRkSummary();
 }
 function updateRkSummary(){
@@ -569,7 +624,15 @@ function updateRkSummary(){
         if(!r)parts.push('<span class="muted">Merek baru — otomatis masuk daftar merek</span>');
         else if(r.stok===null)parts.push(`<span class="muted">Isi ${r.isi} btg/bks · stok tidak dihitung</span>`);
         else{
-            const need=Number.isInteger(qty)&&qty>0?(rkUnit==="BUNGKUS"?qty*r.isi:qty):0;
+            // Adjust stock check logic for half packs
+            let need;
+            if (rkUnit === "BUNGKUS") {
+                need = qty * r.isi;
+            } else if (rkUnit === "SETENGAH_BUNGKUS") {
+                need = qty * (r.isi / 2);
+            } else { // BATANG
+                need = qty;
+            }
             parts.push(need>r.stok
                 ?`<span class="warn">Stok tidak cukup — sisa ${esc(fmtStok(r))}</span>`
                 :`<span class="${isLowRokok(r)?"warn":"muted"}">Sisa stok ${esc(fmtStok(r))}</span>`);
@@ -580,7 +643,7 @@ function updateRkSummary(){
     document.getElementById("rkCashChips").innerHTML=notes.map((v,i)=>`<button type="button" data-paid="${v}">${i===0?"Uang pas":money(v)}</button>`).join("");
 }
 
-document.getElementById("rokokName").addEventListener("input",()=>{applyStoredPrice(false);renderRokokChips();updateRkSummary();});
+document.getElementById("rokokName").addEventListener("input",()=>{applyStoredPrice(false);renderRokokChips();syncRokokForm();});
 document.getElementById("rokokPrice").addEventListener("input",()=>{rkPriceAuto=false;updateRkSummary();});
 document.getElementById("rokokQty").addEventListener("input",updateRkSummary);
 document.getElementById("rokokPaid").addEventListener("input",updateRkSummary);
@@ -604,7 +667,7 @@ document.getElementById("rkChips").addEventListener("click",event=>{
     const button=event.target.closest("button[data-id]");if(!button)return;
     const r=rokok.find(x=>x.id===button.dataset.id);if(!r)return;
     document.getElementById("rokokName").value=r.name;
-    applyStoredPrice(true);renderRokokChips();updateRkSummary();
+    applyStoredPrice(true);renderRokokChips();syncRokokForm();
     document.getElementById("rokokQty").focus();
     document.getElementById("rokokQty").select();
 });
@@ -625,19 +688,20 @@ document.getElementById("rokokForm").addEventListener("submit",event=>{
     const paid=rkMethod==="CASH"?Number(el.paid.value)||0:0;
     if(paid>0&&paid<total){alert(`Uang diterima kurang ${money(total-paid)}.`);el.paid.focus();return;}
     const existing=findRokok(name);
+    if(rkUnit==="SETENGAH_BUNGKUS"&&((existing?.isi||DEFAULT_ISI)%2!==0)){alert("Setengah bungkus hanya bisa dijual jika isi bungkusnya genap.");return;}
     if(existing&&existing.stok!==null){
-        const need=rkUnit==="BUNGKUS"?qty*existing.isi:qty;
+        const need=rkUnit==="BUNGKUS"?qty*existing.isi:(rkUnit==="SETENGAH_BUNGKUS"?qty*(existing.isi/2):qty);
         if(need>existing.stok){alert(`Stok ${existing.name} tidak cukup. Sisa ${fmtStok(existing)}.\nKoreksi stok di "Daftar merek" kalau hitungannya salah.`);return;}
     }
     const unit=rkUnit, method=rkMethod;
     let priceChanged=false, savedName=name;
     const ok=transact(()=>{
         let r=findRokok(name);
-        if(!r){r={id:newId(),name,isi:DEFAULT_ISI,hargaBatang:null,hargaBungkus:null,stok:null};rokok.push(r);}
-        const key=unit==="BATANG"?"hargaBatang":"hargaBungkus";
-        if(r[key]!==null&&r[key]!==price)priceChanged=true;
+        if(!r){r={id:newId(),name,isi:DEFAULT_ISI,            hargaBatang:null,hargaBungkus:null,hargaSetengah:null,stok:null};rokok.push(r);}
+        const key=unit==="BATANG"?"hargaBatang":(unit==="SETENGAH_BUNGKUS"?"hargaSetengah":"hargaBungkus");
+        if(r[key]!=null&&r[key]!==price)priceChanged=true;
         r[key]=price;
-        const batang=unit==="BUNGKUS"?qty*r.isi:qty;
+        const batang=unit==="BUNGKUS"?qty*r.isi:(unit==="SETENGAH_BUNGKUS"?qty*(r.isi/2):qty);
         const deducted=r.stok!==null?batang:0;
         if(deducted)r.stok-=deducted;
         savedName=r.name;
@@ -666,14 +730,17 @@ document.getElementById("rokokMasterForm").addEventListener("submit",event=>{
     const name=document.getElementById("rmName").value.trim();
     const isi=Number(document.getElementById("rmIsi").value);
     const rawBtg=document.getElementById("rmBatang").value.trim();
+    const rawHalf=document.getElementById("rmSetengah").value.trim();
     const rawBks=document.getElementById("rmBungkus").value.trim();
     const rawStok=document.getElementById("rmStok").value.trim();
+    const stockProvided=rawStok!=="";
     const hb=rawBtg===""?null:Number(rawBtg);
+    const hh=rawHalf===""?null:Number(rawHalf);
     const hk=rawBks===""?null:Number(rawBks);
     const add=rawStok===""?0:Number(rawStok);
     if(!name){alert("Isi nama merek rokok.");return;}
     if(!Number.isInteger(isi)||isi<1||isi>100){alert("Isi per bungkus harus angka bulat 1–100.");return;}
-    if((hb!==null&&(!Number.isFinite(hb)||hb<1))||(hk!==null&&(!Number.isFinite(hk)||hk<1))){alert("Harga harus angka minimal 1, atau dikosongkan.");return;}
+    if((hb!==null&&(!Number.isFinite(hb)||hb<1))||(hh!==null&&(!Number.isFinite(hh)||hh<1))||(hk!==null&&(!Number.isFinite(hk)||hk<1))){alert("Harga harus angka minimal 1, atau dikosongkan.");return;}
     if(!Number.isInteger(add)||add<0){alert("Tambah stok harus angka bulat (jumlah bungkus).");return;}
     const editing=rkEditingId?rokok.find(r=>r.id===rkEditingId):null;
     const duplicate=rokok.find(r=>sameName(r.name,name)&&r.id!==editing?.id);
@@ -682,11 +749,11 @@ document.getElementById("rokokMasterForm").addEventListener("submit",event=>{
     const ok=transact(()=>{
         if(target){
             target.isi=isi;
-            if(editing){target.name=name;target.hargaBatang=hb;target.hargaBungkus=hk;}
-            else{if(hb!==null)target.hargaBatang=hb;if(hk!==null)target.hargaBungkus=hk;}
-            if(add>0)target.stok=(target.stok??0)+add*isi;
+            if(editing){target.name=name;target.hargaBatang=hb;target.hargaSetengah=hh;target.hargaBungkus=hk;}
+            else{if(hb!==null)target.hargaBatang=hb;if(hh!==null)target.hargaSetengah=hh;if(hk!==null)target.hargaBungkus=hk;}
+            if(stockProvided&&(target.stok===null||add>0))target.stok=(target.stok??0)+add*isi;
         }else{
-            rokok.push({id:newId(),name,isi,hargaBatang:hb,hargaBungkus:hk,stok:add>0?add*isi:null});
+            rokok.push({id:newId(),name,isi,hargaBatang:hb,hargaSetengah:hh,hargaBungkus:hk,stok:stockProvided?add*isi:null});
         }
     });
     if(!ok)return;
@@ -704,6 +771,7 @@ document.getElementById("rokokMasterList").addEventListener("click",event=>{
         document.getElementById("rmName").value=r.name;
         document.getElementById("rmIsi").value=r.isi;
         document.getElementById("rmBatang").value=r.hargaBatang??"";
+        document.getElementById("rmSetengah").value=r.hargaSetengah??"";
         document.getElementById("rmBungkus").value=r.hargaBungkus??"";
         document.getElementById("rmStok").value="";
         document.getElementById("rmSubmit").textContent="Simpan perubahan";
@@ -746,7 +814,7 @@ document.getElementById("itemForm").addEventListener("submit",event=>{
     const qty=Number(document.getElementById("itemQty").value);
     const price=Number(document.getElementById("itemPrice").value);
     if(!name||!Number.isInteger(qty)||qty<1||!Number.isFinite(price)||price<1){alert("Isi nama, jumlah stok, dan harga jual dengan benar.");return;}
-    const existing=data.items.find(item=>item.name.toLocaleLowerCase()===name.toLocaleLowerCase());
+    const existing=data.items.find(item=>sameName(item.name,name));
     const previous=existing?{qty:existing.qty,price:existing.price}:null;
     if(existing){existing.qty=Number(existing.qty)+qty;existing.price=price;}
     else data.items.push({id:Date.now()+""+Math.random().toString(16).slice(2),name,qty,price});
@@ -811,7 +879,7 @@ function editItem(id){
     if(priceInput===null)return;
     const price=Number(priceInput);
     if(!cleanName||!Number.isFinite(price)||price<1){alert("Nama dan harga jual harus diisi dengan benar.");return;}
-    const duplicate=data.items.find(entry=>entry.id!==id&&entry.name.toLocaleLowerCase()===cleanName.toLocaleLowerCase());
+    const duplicate=data.items.find(entry=>entry.id!==id&&sameName(entry.name,cleanName));
     if(duplicate){alert("Nama barang tersebut sudah digunakan.");return;}
     const previous={name:item.name,price:item.price};
     item.name=cleanName;item.price=price;
@@ -944,7 +1012,7 @@ document.getElementById("downloadReport").addEventListener("click",()=>{
     const sales=filteredSales();
     if(sales===null){alert("Rentang tanggal tidak valid.");return;}
     const quote=value=>'"'+String(value??"").replaceAll('"','""')+'"';
-    const rows=[["Tanggal","Waktu","Jenis","Barang","Jumlah","Satuan","Harga","Pembayaran","Total"],...sales.map(sale=>[sale.date,sale.time,sale.isRokok?"Rokok":"Barang",sale.name,sale.qty,sale.isRokok?(saleUnit(sale)==="BATANG"?"Batang":"Bungkus"):"Unit",sale.price,sale.method,sale.total])];
+    const rows=[["Tanggal","Waktu","Jenis","Barang","Jumlah","Satuan","Harga","Pembayaran","Total"],...sales.map(sale=>[sale.date,sale.time,sale.isRokok?"Rokok":"Barang",sale.name,sale.qty,sale.isRokok?(saleUnit(sale)==="BATANG"?"Batang":(saleUnit(sale)==="SETENGAH_BUNGKUS"?"½ Bungkus":"Bungkus")):"Unit",sale.price,sale.method,sale.total])];
     const csv="\ufeff"+rows.map(row=>row.map(quote).join(",")).join("\r\n");
     const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
     const link=document.createElement("a");
