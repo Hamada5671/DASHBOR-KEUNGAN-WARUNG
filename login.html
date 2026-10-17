@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0f24">
+<title>Masuk — ARENA 27 NET</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+body.login{
+    overflow:hidden;
+    --grad:linear-gradient(125deg,#ff7ab8 0%,#a25cff 52%,#7ee8ff 100%);
+}
+/* video anime jadi lapisan paling bawah, kanvas sakura + veil tetap di atasnya */
+.bg-video{position:fixed;inset:0;z-index:-3;overflow:hidden;background:#080b1e}
+.bg-video video{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:cover;filter:saturate(1.1) contrast(1.05) brightness(.96)}
+.bg-stack{background:none}
+.bg-stack .bg-veil{background:
+    linear-gradient(90deg,rgba(6,8,22,.2) 0%,rgba(6,8,22,.35) 45%,rgba(6,8,22,.8) 100%),
+    linear-gradient(0deg,rgba(6,8,22,.86) 0%,rgba(6,8,22,.28) 42%,rgba(6,8,22,.5) 100%);}
+
+.scan{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,rgba(0,0,0,0) 1px 3px);
+    mix-blend-mode:overlay;
+}
+.fx{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fx span{
+    position:absolute;bottom:-20px;width:var(--s);height:var(--s);border-radius:50%;
+    background:radial-gradient(circle,#ffd9ec 0%,rgba(255,122,184,.7) 40%,rgba(0,0,0,0) 70%);
+    filter:blur(.4px);opacity:0;animation:rise var(--d) linear var(--w) infinite;
+}
+@keyframes rise{
+    0%{transform:translate(0,0);opacity:0}
+    14%{opacity:.8}
+    100%{transform:translate(var(--x),-110vh);opacity:0}
+}
+
+.topbar{
+    position:fixed;top:18px;left:22px;right:22px;z-index:3;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.mini-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.06em;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.mini-brand b{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;background:var(--grad);font-size:11px;box-shadow:0 0 18px rgba(162,92,255,.55)}
+.kembali{
+    display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;
+    border:1px solid rgba(163,178,255,.26);background:rgba(10,13,32,.45);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:#dfe6ff;font-size:12px;font-weight:700;text-decoration:none;transition:.18s;
+}
+.kembali:hover{background:rgba(162,92,255,.28);border-color:rgba(255,122,184,.6);transform:translateY(-1px)}
+.sound{
+    display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;
+    border:1px solid rgba(163,178,255,.26);background:rgba(10,13,32,.45);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:#dfe6ff;font-size:12px;font-weight:700;transition:.18s;
+}
+.sound:hover{background:rgba(162,92,255,.28);border-color:rgba(255,122,184,.6)}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px}
+.eq i{width:3px;height:4px;border-radius:2px;background:#e6ccff}
+.sound.on .eq i{animation:eq .8s ease-in-out infinite}
+.sound.on .eq i:nth-child(2){animation-delay:.2s}
+.sound.on .eq i:nth-child(3){animation-delay:.4s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
+
+.hero{position:fixed;left:6vw;bottom:9vh;z-index:2;max-width:520px;text-shadow:0 4px 24px rgba(0,0,0,.7)}
+.hero .jp{font-size:14px;letter-spacing:.48em;color:#e6ccff;opacity:.9}
+.hero h1{margin-top:8px;font-family:var(--font-display);font-size:clamp(40px,6vw,74px);font-weight:700;line-height:.95;letter-spacing:-2px}
+.hero h1 em{
+    font-style:normal;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 20px rgba(255,122,184,.5));
+}
+.hero p{margin-top:14px;max-width:390px;color:#cfd6f6;font-size:15px;line-height:1.6}
+
+.stage{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:flex-end;padding:88px 7vw 54px}
+.gate{
+    position:relative;width:min(100%,412px);padding:28px 28px 22px;border-radius:24px;
+    border:1px solid rgba(255,122,184,.26);
+    background:linear-gradient(160deg,rgba(34,25,68,.76),rgba(11,14,34,.84));
+    backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
+    box-shadow:0 32px 78px rgba(2,4,14,.62),0 0 60px rgba(126,92,255,.22),inset 0 1px rgba(255,255,255,.09);
+    animation:cardIn .65s cubic-bezier(.2,.8,.2,1) both;
+}
+.gate::before{
+    content:"";position:absolute;inset:-1px;border-radius:24px;padding:1px;pointer-events:none;
+    background:linear-gradient(140deg,rgba(126,232,255,.85),rgba(255,122,184,.2) 42%,rgba(162,92,255,.2) 60%,rgba(255,122,184,.9));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+body.leaving .gate{animation:cardOut .42s ease forwards}
+body.leaving .stage,body.leaving .hero,body.leaving .topbar{transition:opacity .42s;opacity:0}
+@keyframes cardOut{to{opacity:0;transform:translateY(-14px) scale(.98)}}
+
+.gate-head{display:flex;align-items:center;gap:13px}
+.gate-head .logo-icon{width:50px;height:50px;border-radius:15px;flex:none}
+.gate-head .logo-icon svg{width:34px;height:34px}
+.gate-head h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.3px}
+.gate-head small{display:block;margin-top:3px;color:var(--muted);font-size:11.5px;font-weight:600}
+
+.clockline{
+    margin:15px 0 17px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035);
+}
+.clockline b{font-family:var(--font-display);font-size:23px;line-height:1;letter-spacing:.03em}
+.clockline span{color:var(--muted);font-size:11.5px;text-align:right}
+
+.shift-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:17px}
+.shift-pick button{
+    display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 5px;border-radius:13px;
+    border:1px solid rgba(163,178,255,.2);background:rgba(255,255,255,.035);
+    color:#bdbfe8;font-size:12px;font-weight:800;transition:.18s;
+}
+.shift-pick button em{font-style:normal;font-size:17px;line-height:1}
+.shift-pick button small{font-size:8.5px;font-weight:700;letter-spacing:.06em;color:#7c86b4}
+.shift-pick button:hover{border-color:rgba(255,122,184,.5);color:#fff;transform:translateY(-1px)}
+.shift-pick button.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 9px 24px rgba(162,92,255,.42)}
+.shift-pick button.on small{color:#f3e8ff}
+
+.status{
+    margin:-4px 0 14px;padding:10px 12px;border-radius:12px;font-size:11.5px;line-height:1.6;
+    border:1px solid rgba(126,232,255,.3);background:rgba(126,232,255,.09);color:#d5f2ff;
+}
+.field{margin-bottom:13px}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.pw button{
+    position:absolute;right:6px;top:6px;width:34px;height:30px;border:0;border-radius:8px;
+    background:transparent;color:var(--muted);font-size:14px;
+}
+.pw button:hover{background:rgba(255,122,184,.16);color:#fff}
+.submit{width:100%;min-height:47px;margin-top:3px;font-size:13px;letter-spacing:.03em}
+.submit[disabled]{opacity:.6}
+.err{min-height:18px;margin-top:10px;text-align:center;color:var(--bad);font-size:11.5px;font-weight:700}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.foot{margin-top:15px;padding-top:13px;border-top:1px solid var(--line);color:#7c86b4;font-size:10.5px;line-height:1.65;text-align:center}
+.credit{position:fixed;right:22px;bottom:14px;z-index:3;color:rgba(220,228,255,.45);font-size:10px;letter-spacing:.05em;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+
+@media(max-width:900px){
+    body.login{overflow:auto}
+    .bg-stack .bg-veil{background:linear-gradient(180deg,rgba(6,8,22,.45),rgba(6,8,22,.84))}
+    .hero,.credit{display:none}
+    .stage{justify-content:center;padding:82px 16px 44px}
+}
+@media(max-height:640px){.gate{padding:20px 22px 16px}.clockline{margin:11px 0 13px}.shift-pick{margin-bottom:13px}}
+@media(max-width:420px){
+    .gate{padding:23px 18px 18px;border-radius:20px}
+    .gate::before{border-radius:20px}
+    .mini-brand span{display:none}
+    #soundText{display:none}
+    .clockline b{font-size:20px}
+}
+</style>
+</head>
+<body class="login">
+
+<div class="bg-video" aria-hidden="true">
+    <video id="bgVideo" autoplay muted loop playsinline preload="auto" poster="bg-anime-poster.webp">
+        <source src="bg-anime.mp4" type="video/mp4">
+    </video>
+</div>
+<div class="scan" aria-hidden="true"></div>
+<div class="fx" id="fx" aria-hidden="true"></div>
+
+<div class="topbar">
+    <div class="mini-brand"><b>A27</b><span>ARENA 27 NET</span></div>
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="sound" id="soundBtn" type="button" aria-pressed="false"><span class="eq"><i></i><i></i><i></i></span><span id="soundText">Putar lagu</span></button>
+        <a class="kembali" href="index.html" id="backLink">← Balik ke kasir</a>
+    </div>
+</div>
+
+<div class="hero" aria-hidden="true">
+    <div class="jp">虚式 · 茈</div>
+    <h1>ARENA <em>27</em><br>NET</h1>
+    <p>Masuk dulu sebelum jaga. Catatan billing, jajan, dan rokok eceran semuanya nunggu di dalam.</p>
+</div>
+
+<main class="stage">
+    <section class="gate" id="gate" aria-labelledby="gateTitle">
+        <div class="gate-head">
+            <div class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64"><path d="M32 5 53 13v16c0 14-8 23-21 30C19 52 11 43 11 29V13L32 5Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><text x="32" y="34" text-anchor="middle" fill="currentColor" font-family="Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="-1">A27</text><path d="M21 40h22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><text x="32" y="49" text-anchor="middle" fill="currentColor" font-family="Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="1.1">ARENA NET</text></svg>
+            </div>
+            <div>
+                <h2 id="gateTitle">Selamat datang</h2>
+                <small id="gateSub">Pilih akun buat mulai jaga</small>
+            </div>
+        </div>
+
+        <div class="clockline"><b id="clockTime">--:--</b><span id="clockDate"></span></div>
+
+        <div class="shift-pick" id="shiftPick" role="tablist" aria-label="Pilih akun">
+            <button type="button" role="tab" data-shift="SIANG"><em>☀</em>Siang<small>SHIFT</small></button>
+            <button type="button" role="tab" data-shift="MALAM"><em>☾</em>Malam<small>SHIFT</small></button>
+            <button type="button" role="tab" data-shift="OWNER"><em>♛</em>Owner<small>LIHAT SEMUA</small></button>
+        </div>
+
+        <div id="formHost"></div>
+    </section>
+</main>
+
+<div class="credit"> Pembuat Skyajaa · TikTok @metooo9</div>
+
+<script src="assets/anime-bg.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+const query = new URLSearchParams(location.search);
+const next = ["index.html", "stock.html"].includes(query.get("next")) ? query.get("next") : "index.html";
+const host = document.getElementById("formHost");
+const pick = document.getElementById("shiftPick");
+const gate = document.getElementById("gate");
+
+document.getElementById("backLink").href = next;
+
+if (query.get("switch")) ArenaAuth.signOut();
+else if (ArenaAuth.session() && !query.get("as")) location.replace(next);
+
+const savedShift = localStorage.getItem("arena27_last_shift");
+let shift = [query.get("as"), query.get("account"), savedShift].find(a => ArenaAuth.SHIFTS.includes(a)) || "SIANG";
+
+function eyeField(id, label, attrs) {
+    return `<div class="field"><label for="${id}">${label}</label><div class="pw">
+        <input id="${id}" type="password" ${attrs}>
+        <button type="button" data-eye="${id}" aria-label="Lihat atau sembunyikan">👁</button>
+    </div></div>`;
+}
+
+function render() {
+    const fresh = !ArenaAuth.accounts()[shift];
+    const owner = ArenaAuth.isOwnerPin(shift);
+    const name = ArenaAuth.LABELS[shift];
+
+    pick.querySelectorAll("button").forEach(b => {
+        const on = b.dataset.shift === shift;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-selected", on);
+    });
+    document.getElementById("gateTitle").textContent = fresh ? "Buat akun " + name : "Masuk " + name;
+    document.getElementById("gateSub").textContent = owner
+        ? "Rekap gabungan semua shift"
+        : (shift === "SIANG" ? "Jaga siang, semangat!" : "Jaga malam, jangan ketiduran ya");
+
+    let html = "";
+    if (fresh) {
+        html += `<div class="status">${owner
+            ? "PIN owner belum dibuat. Bikin PIN 4–8 angka, nanti dipakai tiap mau buka rekap."
+            : "Akun " + name + " belum ada. Bikin username &amp; password dulu, cukup sekali."}</div>`;
+    }
+    if (owner) {
+        html += eyeField("secret", fresh ? "PIN baru (4–8 angka)" : "PIN owner",
+            `inputmode="numeric" maxlength="8" autocomplete="${fresh ? "new-password" : "current-password"}" placeholder="••••"`);
+        if (fresh) html += eyeField("confirm", "Ulangi PIN", `inputmode="numeric" maxlength="8" autocomplete="new-password" placeholder="••••"`);
+    } else {
+        html += `<div class="field"><label for="user">Username</label><input id="user" maxlength="40" autocomplete="username" placeholder="misal: gilang"></div>`;
+        html += eyeField("secret", fresh ? "Password (minimal 6 karakter)" : "Password",
+            `autocomplete="${fresh ? "new-password" : "current-password"}" placeholder="••••••"`);
+        if (fresh) html += eyeField("confirm", "Ulangi password", `autocomplete="new-password" placeholder="••••••"`);
+    }
+    html += `<button class="btn submit" type="submit" id="submitBtn" form="authForm">${fresh ? "Buat akun &amp; masuk" : "Masuk"}</button>`;
+    html = `<form id="authForm" autocomplete="on" novalidate>${html}</form><div class="err" id="err" role="alert"></div>`;
+
+    host.innerHTML = html;
+    host.dataset.fresh = fresh ? "1" : "";
+    (owner ? document.getElementById("secret") : document.getElementById("user")).focus();
+}
+
+function fail(message) {
+    document.getElementById("err").textContent = message;
+    gate.classList.remove("shake");
+    void gate.offsetWidth;
+    gate.classList.add("shake");
+}
+
+function enter() {
+    try {
+        ArenaAuth.startSession(shift);
+        localStorage.setItem("arena27_last_shift", shift);
+    } catch (e) {
+        fail("Penyimpanan browser penuh atau diblokir, jadi belum bisa masuk.");
+        return false;
+    }
+    document.body.classList.add("leaving");
+    setTimeout(() => location.replace(next), 420);
+    return true;
+}
+
+host.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.target;
+    const fresh = host.dataset.fresh === "1";
+    const owner = ArenaAuth.isOwnerPin(shift);
+    const secret = document.getElementById("secret");
+    const userField = document.getElementById("user");
+    const button = document.getElementById("submitBtn");
+    const username = userField ? userField.value.trim() : "OWNER";
+
+    document.getElementById("err").textContent = "";
+    if (!owner && !username) return fail("Username belum diisi.");
+    if (!secret.value) return fail(owner ? "PIN belum diisi." : "Password belum diisi.");
+    if (fresh) {
+        if (owner && !/^\d{4,8}$/.test(secret.value)) return fail("PIN harus 4 sampai 8 angka.");
+        if (!owner && username.length < 3) return fail("Username minimal 3 huruf.");
+        if (!owner && secret.value.length < 6) return fail("Password minimal 6 karakter.");
+    }
+    const confirm = document.getElementById("confirm");
+    if (confirm && confirm.value !== secret.value) {
+        return fail(owner ? "Ulangi PIN-nya belum sama." : "Ulangi password-nya belum sama.");
+    }
+
+    button.disabled = true;
+    button.textContent = fresh ? "Menyimpan…" : "Mengecek…";
+    try {
+        await (fresh ? ArenaAuth.register(shift, username, secret.value) : ArenaAuth.login(shift, username, secret.value));
+        if (!enter()) {
+            button.disabled = false;
+            button.innerHTML = fresh ? "Buat akun &amp; masuk" : "Masuk";
+        }
+    } catch (problem) {
+        button.disabled = false;
+        button.innerHTML = fresh ? "Buat akun &amp; masuk" : "Masuk";
+        secret.value = "";
+        secret.focus();
+        fail(problem.message || "Gagal masuk, coba lagi.");
+    }
+});
+
+host.addEventListener("click", event => {
+    const eye = event.target.closest("button[data-eye]");
+    if (!eye) return;
+    const input = document.getElementById(eye.dataset.eye);
+    input.type = input.type === "password" ? "text" : "password";
+    eye.textContent = input.type === "password" ? "👁" : "🙈";
+    input.focus();
+});
+
+pick.addEventListener("click", event => {
+    const button = event.target.closest("button[data-shift]");
+    if (!button || button.dataset.shift === shift) return;
+    shift = button.dataset.shift;
+    localStorage.setItem("arena27_last_shift", shift);
+    render();
+});
+
+function tick() {
+    const now = new Date();
+    document.getElementById("clockTime").textContent = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+    document.getElementById("clockDate").textContent = now.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+}
+tick();
+setInterval(tick, 15000);
+
+const video = document.getElementById("bgVideo");
+const soundBtn = document.getElementById("soundBtn");
+video.play().catch(() => {});
+soundBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+    if (video.paused) video.play().catch(() => {});
+    const on = !video.muted;
+    soundBtn.classList.toggle("on", on);
+    soundBtn.setAttribute("aria-pressed", String(on));
+    document.getElementById("soundText").textContent = on ? "Matikan lagu" : "Putar lagu";
+});
+
+(function particles() {
+    const box = document.getElementById("fx");
+    for (let i = 0; i < 22; i++) {
+        const s = document.createElement("span");
+        s.style.left = Math.random() * 100 + "%";
+        s.style.setProperty("--s", (3 + Math.random() * 6).toFixed(1) + "px");
+        s.style.setProperty("--d", (9 + Math.random() * 10).toFixed(1) + "s");
+        s.style.setProperty("--w", (-Math.random() * 18).toFixed(1) + "s");
+        s.style.setProperty("--x", ((Math.random() - .5) * 160).toFixed(0) + "px");
+        box.appendChild(s);
+    }
+})();
+
+render();
+</script>
+</body>
+</html>
