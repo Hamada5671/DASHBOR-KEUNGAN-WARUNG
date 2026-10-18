@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0f24">
+<meta name="description" content="Boking PC Arena 27 Net dan chat sama staff yang jaga.">
+<title>Boking PC — ARENA 27 NET</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+body.boking{
+    --grad:linear-gradient(125deg,#ff7ab8 0%,#a25cff 52%,#7ee8ff 100%);
+    --wa:#128c4a;
+    --card-in:linear-gradient(165deg,rgba(32,26,64,.72),rgba(10,13,32,.82));
+}
+/* video-nya dipake penuh: hero terang, area form agak gelap biar teks kebaca */
+body.boking .bg-video video{filter:saturate(1.08) contrast(1.05) brightness(.66)}
+body.boking .bg-veil{background:
+    linear-gradient(180deg,rgba(7,9,24,.34) 0%,rgba(7,9,24,.66) 30%,rgba(7,9,24,.88) 62%,rgba(7,9,24,.94) 100%),
+    radial-gradient(120% 70% at 88% -18%,rgba(126,92,255,.32),rgba(126,92,255,0) 58%);}
+
+.fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.fx span{
+    position:absolute;bottom:-20px;width:var(--s);height:var(--s);border-radius:50%;
+    background:radial-gradient(circle,#ffd9ec 0%,rgba(255,122,184,.7) 40%,rgba(0,0,0,0) 70%);
+    filter:blur(.4px);opacity:0;animation:rise var(--d) linear var(--w) infinite;
+}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}14%{opacity:.7}100%{transform:translate(var(--x),-110vh);opacity:0}}
+
+/* ---------- top bar ---------- */
+.topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin-bottom:26px;position:relative;z-index:2;
+}
+.mini-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.06em;text-shadow:0 2px 12px rgba(0,0,0,.65)}
+.mini-brand b{width:33px;height:33px;display:grid;place-items:center;border-radius:11px;background:var(--grad);font-size:11.5px;box-shadow:0 0 20px rgba(162,92,255,.55)}
+.glass-link{
+    display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;
+    border:1px solid rgba(163,178,255,.26);background:rgba(10,13,32,.45);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:#dfe6ff;font-size:11.5px;font-weight:700;text-decoration:none;transition:.18s;
+}
+.glass-link:hover{background:rgba(162,92,255,.3);border-color:rgba(255,122,184,.6);transform:translateY(-1px)}
+.glass-link.on{background:rgba(126,232,255,.22);border-color:var(--aqua);color:#d9f7ff}
+.glass-link[hidden]{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;z-index:2;padding:6px 0 30px;max-width:760px}
+.hero .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;
+    border:1px solid rgba(126,232,255,.32);background:rgba(12,22,44,.5);
+    color:#c9f4ff;font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.hero .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--aqua);box-shadow:0 0 12px var(--aqua);animation:blink 2.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{
+    margin:16px 0 0;font-family:var(--font-display);font-weight:700;
+    font-size:clamp(31px,5.6vw,54px);line-height:1.06;letter-spacing:-1.4px;
+    text-shadow:0 6px 34px rgba(2,4,16,.75);
+}
+.hero h1 em{
+    font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 22px rgba(255,122,184,.45));
+}
+.hero p{margin:15px 0 0;max-width:560px;color:#d3daf8;font-size:14.5px;line-height:1.72;text-shadow:0 3px 18px rgba(0,0,0,.7)}
+.hero p b{color:#ffd6e9}
+.hero .pills{margin:20px 0 0}
+.hero-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:22px}
+.hero-cta{
+    min-height:50px;padding:0 24px;border:0;border-radius:14px;
+    background:var(--grad);color:#fff;font-size:13.5px;font-weight:800;letter-spacing:.01em;
+    box-shadow:0 16px 36px rgba(162,92,255,.45);transition:transform .18s,box-shadow .18s,filter .18s;
+}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 22px 46px rgba(162,92,255,.55);filter:brightness(1.06)}
+
+/* ---------- kartu ---------- */
+.card{background:var(--card-in)}
+.step{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.step .num{
+    width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:9px;
+    background:linear-gradient(140deg,#ff7ab8,#a25cff);color:#fff;font-size:12px;font-weight:800;
+    box-shadow:0 8px 18px rgba(162,92,255,.4);
+}
+.card h2{margin-bottom:14px}
+.intro-note{margin:0 0 18px;color:#b9c2ee;font-size:12.5px;line-height:1.7}
+
+/* kartu harga */
+.kelas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kelas-card{
+    position:relative;display:flex;flex-direction:column;gap:6px;align-items:flex-start;
+    padding:17px 18px;border-radius:16px;text-align:left;
+    border:1px solid var(--line);background:rgba(9,12,28,.55);
+    backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);
+    color:var(--ink);transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+.kelas-card:hover{transform:translateY(-3px);border-color:rgba(255,122,184,.55);box-shadow:0 18px 36px rgba(4,6,20,.5)}
+.kelas-card.on{border-color:transparent;background:linear-gradient(160deg,rgba(255,122,184,.24),rgba(126,92,255,.22));box-shadow:0 16px 34px rgba(162,92,255,.4)}
+.kelas-card .kc-name{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c3cbf2}
+.kelas-card .kc-price{font-family:var(--font-display);font-size:26px;font-weight:700;letter-spacing:-.6px;color:#ffd6e9}
+.kelas-card .kc-price span{font-family:var(--font-body);font-size:11px;font-weight:700;color:#98a3d4;letter-spacing:0}
+.kelas-card .kc-pc{font-size:10.5px;line-height:1.7;color:#8f99c8}
+.kelas-card .kc-go{margin-top:auto;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7ee8ff}
+.kelas-card.on .kc-go{color:#fff}
+
+/* form */
+a.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.bok-send{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.bok-send .wa{background:linear-gradient(135deg,#42d583,#128c4a);box-shadow:0 12px 26px rgba(18,140,74,.4);min-height:49px;padding:0 24px;font-size:13.5px}
+.bok-send .wa[aria-disabled="true"]{filter:grayscale(.55) brightness(.82);opacity:.72}
+.seg button small{display:block;margin-top:2px;font-size:9px;font-weight:700;letter-spacing:.02em;opacity:.85}
+.seg button.active small{opacity:1}
+
+.bok-sum{
+    display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;margin-top:18px;
+    padding:15px 18px;border-radius:14px;border:1px solid var(--line);
+    background:linear-gradient(140deg,rgba(255,122,184,.09),rgba(9,12,28,.6));
+}
+.bok-sum .label{margin:0}
+.bok-sum .value{font-size:25px;margin-top:2px}
+.bok-sum .line{min-width:150px}
+.bok-sum .hintline{width:100%;color:var(--muted);font-size:11px;line-height:1.6}
+
+.preview{
+    margin-top:16px;padding:16px 18px;border-radius:14px;border:1px dashed rgba(163,178,255,.36);
+    background:rgba(5,8,22,.66);color:#cdd6ff;font-size:12px;line-height:1.78;white-space:pre-wrap;
+    font-family:ui-monospace,Consolas,"Courier New",monospace;
+}
+.preview-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px}
+.preview-title span{color:var(--muted);font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.preview-title em{font-style:normal;color:#7f88b8;font-size:10px}
+
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:11px;margin-top:4px}
+.how > div{
+    padding:15px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(9,12,28,.5);
+    color:#b7c0ea;font-size:12px;line-height:1.7;
+}
+.how b{display:block;margin-bottom:5px;color:var(--ink);font-size:12.5px}
+.how i{font-style:normal;color:#ffd6e9;font-weight:800}
+
+.warn{
+    margin-bottom:15px;padding:13px 16px;border-radius:14px;font-size:11.5px;line-height:1.7;
+    border:1px solid rgba(255,210,122,.35);background:rgba(66,44,12,.45);color:#ffe6b0;
+}
+.warn b{color:#ffd6e9}
+.topik{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 16px}
+.topik button{
+    padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(9,12,28,.5);
+    color:#b7c0ea;font-size:11.5px;font-weight:700;transition:.16s;
+}
+.topik button:hover{border-color:var(--saku);color:#fff;transform:translateY(-1px)}
+.topik button.on{background:rgba(126,232,255,.18);border-color:var(--aqua);color:#d9f7ff}
+.note-final{margin-top:14px;color:#8f99c8;font-size:11px;line-height:1.7}
+.credit{margin:22px 0 4px;text-align:center;color:rgba(214,222,255,.42);font-size:10px;letter-spacing:.06em}
+
+/* dock hp */
+.dock{
+    position:fixed;left:12px;right:12px;bottom:12px;z-index:20;display:none;gap:9px;
+    padding:10px;border-radius:16px;border:1px solid rgba(163,178,255,.3);
+    background:rgba(9,12,28,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 -8px 30px rgba(2,4,14,.6);
+}
+.dock a{flex:1;min-height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    font-size:12.5px;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#42d583,#128c4a)}
+.dock a.ghost{background:rgba(255,255,255,.09);border:1px solid var(--line-strong);color:#dfe6ff;flex:0 0 auto;padding:0 18px}
+
+@media(max-width:700px){
+    .hero{padding-top:2px}
+    .hero p{font-size:13.5px}
+    .dock{display:flex}
+    body.boking .container{padding-bottom:96px}
+}
+@media(max-width:520px){
+    .card{padding:18px 15px}
+    .bok-send a.btn{flex:1 1 100%}
+    .bok-sum .line{min-width:120px}
+    .hero-cta{flex:1 1 100%}
+}
+@media(prefers-reduced-motion:reduce){.fx{display:none}.hero .eyebrow i{animation:none}}
+</style>
+</head>
+<body class="boking" data-video="bg-boking.mp4" data-poster="bg-boking-poster.webp">
+
+<div class="fx" id="fx" aria-hidden="true"></div>
+
+<div class="container">
+
+    <div class="topbar">
+        <div class="mini-brand"><b>A27</b><span>ARENA 27 NET</span></div>
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="glass-link" type="button" id="videoToggle" hidden>Video latar</button>
+            <a class="glass-link" href="login.html">Masuk staff</a>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="eyebrow"><i></i>Boking PC &amp; chat staff</div>
+        <h1>Mau PC-nya udah <em>siap</em><br>pas kamu datang?</h1>
+        <p>Isi form di bawah, terus pencet kirim — pesannya otomatis kebuka di WhatsApp. <b>Staff shift siang &amp; malam yang bales</b>, jadi tinggal tunggu konfirmasi dari kita. Nggak perlu login, nggak perlu bayar di muka.</p>
+        <div class="pills" id="infoPills"></div>
+        <div class="hero-actions">
+            <button class="hero-cta" type="button" id="heroCta">Ambil PC sekarang</button>
+            <a class="glass-link" href="#chatCard">Tanya dulu</a>
+        </div>
+    </section>
+
+    <div class="warn" id="ownerWarn" hidden>Nomor WhatsApp warnet belum dipasang di file <b>assets/boking-config.js</b>. Sambil nunggu, isi form-nya terus pencet <b>Salin pesan</b> dan kirim manual ke staff yang jaga.</div>
+
+    <!-- PILIH KLAS -->
+    <section class="card" id="kelasCard">
+        <div class="step"><span class="num">1</span><h2>Pilih klas PC</h2></div>
+        <p class="intro-note">Klik salah satu buat langsung ke isiin di form. Harganya harga standar per jam — PC tertentu bisa beda tarif, tinggal tanya.</p>
+        <div class="kelas-grid" id="hargaKartu"></div>
+    </section>
+
+    <!-- FORM -->
+    <section class="card" id="bokCard">
+        <div class="step"><span class="num">2</span><h2>Tulis siapa yang main</h2></div>
+
+        <div class="grid">
+            <div class="field"><label for="bokName">NAMA / NICK</label><input id="bokName" maxlength="40" autocomplete="nickname" placeholder="misal: Gilang"></div>
+            <div class="field"><label for="bokPhone">NOMOR WA</label><input id="bokPhone" inputmode="numeric" maxlength="16" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+        </div>
+
+        <div class="field" style="margin-top:18px">
+            <label>KLAS</label>
+            <div class="seg" id="kelasSeg"></div>
+        </div>
+
+        <div class="field" style="margin-top:18px">
+            <label>PC YANG MAU DIAMBIL</label>
+            <div class="chips" id="pcChips"></div>
+        </div>
+
+        <div class="grid" style="margin-top:18px">
+            <div class="field"><label for="bokDate">TANGGAL</label><input id="bokDate" type="date"></div>
+            <div class="field"><label for="bokStart">JAM MULAI</label><select id="bokStart"></select></div>
+        </div>
+
+        <div class="field" style="margin-top:18px">
+            <label>DURASI</label>
+            <div class="chips" id="durChips"></div>
+        </div>
+
+        <div class="field" style="margin-top:18px">
+            <label for="bokNote">CATATAN (BOLEH DILEWAT)</label>
+            <input id="bokNote" maxlength="120" placeholder="misal: bareng 3 teman, mao paket malam">
+        </div>
+
+        <div class="bok-sum">
+            <div class="line"><div class="label">Perkiraan biaya</div><div class="value" id="sumHarga">—</div></div>
+            <div class="line"><div class="label">Main jam</div><div class="value" id="sumJam" style="font-size:19px">—</div></div>
+            <div class="hintline" id="sumNote">Angka di atas perkiraan dari harga standar. Bisa beda kalau lagi ada promo atau PC-nya tarif khusus.</div>
+        </div>
+
+        <div class="preview-title"><span>Isi pesan yang bakal kekirim</span><em>ubah form-nya, pesan ikut berubah</em></div>
+        <div class="preview" id="msgPreview"></div>
+
+        <div class="bok-send">
+            <a class="btn wa" id="waSend" href="#" target="_blank" rel="noopener">Kirim lewat WhatsApp</a>
+            <button class="btn-ghost" type="button" id="copyMsg">Salin pesan</button>
+        </div>
+        <div class="hint" id="bokMsg"></div>
+    </section>
+
+    <!-- CHAT -->
+    <section class="card" id="chatCard">
+        <div class="step"><span class="num">3</span><h2>Ngobrol sama yang jaga</h2></div>
+        <p class="intro-note">Nggak yakin kelas mana yang masih kosong, mau nanya paket, atau mau ajak teman sekalian? Klik salah satu pertanyaan di bawah, terus kirim. Yang jaga siang sama malam bakal bales dari nomor yang sama.</p>
+        <div class="topik" id="topikChips"></div>
+        <a class="btn wa" id="chatLink" href="#" target="_blank" rel="noopener" style="min-height:49px;padding:0 24px;font-size:13.5px">Buka chat WhatsApp</a>
+        <p class="note-final">Lagi di PC dan nggak bisa buka WhatsApp? Pencet <b>Salin pesan</b> di form boking terus kirim lewat WA teman juga boleh.</p>
+    </section>
+
+    <!-- CARA -->
+    <section class="card">
+        <div class="step"><span class="num">4</span><h2>Alur bokingnya</h2></div>
+        <div class="how">
+            <div><b>Isi form</b>Pilih klas, PC, jam, dan durasi. <i>Perkiraan biaya</i> langsung kelihatan.</div>
+            <div><b>Kirim ke WA</b>Pesan rapi otomatis kebakwa ke nomor yang lagi jaga.</div>
+            <div><b>Tunggu dikonfirmasi</b>Kalau udah dibales, PC-nya kita tahan <i>15 menit</i> dari jam yang diminta.</div>
+            <div><b>Datang &amp; bayar</b>Bayar di kasir pas datang. Belum bayar di muka, jadi nggak ada yang hangus.</div>
+        </div>
+        <p class="note-final">Kalau telat datang dan nggak kabar, PC-nya kita lepas buat yang nunggu. Mau boking buat ramean atau event kecil? Chat aja, biasanya bisa kita siapin.</p>
+    </section>
+
+    <p class="credit">pembuat skyajaaa · TikTok @metooo9</p>
+
+</div>
+
+<div class="dock">
+    <a href="#bokCard">Ambil PC</a>
+    <a class="ghost" href="#chatCard">Chat</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/anime-bg.js"></script>
+<script src="assets/boking-config.js"></script>
+<script>
+const CFG = window.ARENA_BOKING || {};
+const KELAS = CFG.kelas || {};
+const KELAS_KEYS = Object.keys(KELAS);
+const DURASI = Array.isArray(CFG.durasi) && CFG.durasi.length ? CFG.durasi : [1, 2, 3, 4, 6, 8];
+const BUKA = Number.isFinite(+CFG.jam?.buka) ? +CFG.jam.buka : 10;
+const TUTUP = Number.isFinite(+CFG.jam?.tutup) ? +CFG.jam.tutup : 22;
+
+const state = {
+    kelas: KELAS_KEYS[0] || "REGULER",
+    pc: "",
+    durasi: DURASI.includes(2) ? 2 : DURASI[0],
+    topik: 0
+};
+
+const el = id => document.getElementById(id);
+const rp = n => (!n || n < 1 ? null : "Rp " + Number(n).toLocaleString("id-ID"));
+
+function toast(msg) {
+    const t = el("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* nomor WA boleh ditulis gaya apa aja (0812-3456-7890, +62 812...) */
+function waTarget() {
+    const raw = String(CFG.wa || "").replace(/[^\d]/g, "");
+    if (!raw) return "";
+    return raw.startsWith("62") ? raw : "62" + raw.replace(/^0+/, "");
+}
+
+function customerPhone() {
+    return el("bokPhone").value.replace(/[^\d]/g, "");
+}
+
+function jamLabel(h) {
+    return String(((h % 24) + 24) % 24).padStart(2, "0") + ":00";
+}
+
+function tanggalText() {
+    const v = el("bokDate").value;
+    if (!v) return "nanti aku kabarin";
+    const d = new Date(v + "T00:00:00");
+    if (isNaN(d)) return v;
+    const today = new Date();
+    const besok = new Date(today.getTime() + 86400000);
+    const same = a => a.toLocaleDateString("id-ID") === d.toLocaleDateString("id-ID");
+    const base = d.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long" });
+    if (same(today)) return base + " (hari ini)";
+    if (same(besok)) return base + " (besok)";
+    return base + ", " + d.getFullYear();
+}
+
+function hargaKelas() {
+    return Number((KELAS[state.kelas] || {}).harga) || 0;
+}
+
+function pesan() {
+    const nama = el("bokName").value.trim() || "(belum diisi)";
+    const phone = customerPhone() || "(belum diisi)";
+    const mulai = Number(el("bokStart").value || BUKA);
+    const akhir = mulai + state.durasi;
+    const jam = jamLabel(mulai) + " – " + jamLabel(akhir) + " (" + state.durasi + " jam" + (akhir > TUTUP ? ", lewat jam tutup" : "") + ")";
+    const harga = hargaKelas();
+    const biaya = harga ? rp(harga * state.durasi) + " (perkiraan)" : "nanya dulu";
+
+    let text = "Halo " + (CFG.nama || "Arena 27 Net") + ", mau boking PC dong.\n\n";
+    text += "Nama    : " + nama + "\n";
+    text += "No WA   : " + phone + "\n";
+    text += "Kelas   : " + state.kelas + "\n";
+    text += "PC      : " + (state.pc || "mana aja boleh") + "\n";
+    text += "Tanggal : " + tanggalText() + "\n";
+    text += "Jam     : " + jam + "\n";
+    text += "Biaya   : " + biaya + "\n";
+    const note = el("bokNote").value.trim();
+    if (note) text += "Catatan : " + note + "\n";
+    text += "\nDikonfirmasi ya, PC-nya aku ambil sesuai jam itu.";
+    return text;
+}
+
+function chatPesan() {
+    const topik = (CFG.topik || [])[state.topik] || "Halo, aku mau tanya-tanya dong.";
+    const nama = el("bokName").value.trim();
+    return "Halo " + (CFG.nama || "Arena 27 Net") + ", " + topik + (nama ? "\n\n(nama: " + nama + ")" : "");
+}
+
+function waHref(text) {
+    const q = encodeURIComponent(text);
+    const num = waTarget();
+    return num ? "https://wa.me/" + num + "?text=" + q : "https://wa.me/?text=" + q;
+}
+
+function valid() {
+    if (el("bokName").value.trim().length < 2) return "Namanya belum bener, minimal 2 huruf.";
+    if (customerPhone().length < 9) return "Nomor WA-nya belum lengkap, biar staff gampang kabarin balik.";
+    return "";
+}
+
+function renderKelas() {
+    el("kelasSeg").innerHTML = KELAS_KEYS.map(k => {
+        const h = rp(KELAS[k].harga);
+        return '<button type="button" data-kelas="' + k + '" class="' + (k === state.kelas ? "active" : "") + '">' +
+            k + "<small>" + (h ? h + " / jam" : "nanya staff") + "</small></button>";
+    }).join("");
+}
+
+function renderKelasKartu() {
+    el("hargaKartu").innerHTML = KELAS_KEYS.length ? KELAS_KEYS.map(k => {
+        const daftar = KELAS[k].pc || [];
+        const h = rp(KELAS[k].harga);
+        return '<button type="button" class="kelas-card' + (k === state.kelas ? " on" : "") + '" data-kelas="' + k + '">' +
+            '<span class="kc-name">' + k + "</span>" +
+            '<span class="kc-price">' + (h || "nanya staff") + (h ? " <span>/ jam</span>" : "") + "</span>" +
+            '<span class="kc-pc">' + (daftar.length ? daftar.length + " PC · " + daftar.join(", ") : "Tanya staff PC-nya berapa aja") + "</span>" +
+            '<span class="kc-go">' + (k === state.kelas ? "Dipilih ↓" : "Ambil klas ini ↓") + "</span>" +
+            "</button>";
+    }).join("") : '<div class="chip-empty">Belum ada klas PC yang ditulis di konfigurasi.</div>';
+}
+
+function renderPc() {
+    const daftar = (KELAS[state.kelas] || {}).pc || [];
+    el("pcChips").innerHTML = (daftar.length
+        ? daftar.map(p => '<button type="button" data-pc="' + p + '">' + p + "</button>").join("")
+        : '<span class="chip-empty">Daftar PC-nya belum ditulis, tulis aja di catatan.</span>')
+        + '<button type="button" data-pc="">Mana aja boleh</button>';
+    el("pcChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.pc === state.pc));
+}
+
+function renderDurasi() {
+    el("durChips").innerHTML = DURASI.map(d =>
+        '<button type="button" data-dur="' + d + '">' + d + " jam</button>").join("");
+    el("durChips").querySelectorAll("button").forEach(b =>
+        b.classList.toggle("on", Number(b.dataset.dur) === state.durasi));
+}
+
+function renderTopik() {
+    const list = CFG.topik && CFG.topik.length ? CFG.topik : ["Halo, aku mau tanya-tanya dong."];
+    el("topikChips").innerHTML = list.map((t, i) =>
+        '<button type="button" data-topik="' + i + '">' + t + "</button>").join("");
+    el("topikChips").querySelectorAll("button").forEach(b =>
+        b.classList.toggle("on", Number(b.dataset.topik) === state.topik));
+}
+
+function renderInfo() {
+    const harga = KELAS_KEYS.map(k => Number(KELAS[k].harga) || 0).filter(n => n > 0);
+    const pills = [
+        '<span class="pill">Jam buka<b>' + jamLabel(BUKA) + " – " + jamLabel(TUTUP) + "</b></span>"
+    ];
+    if (CFG.alamat) pills.push('<span class="pill">Lokasi<b>' + CFG.alamat + "</b></span>");
+    pills.push('<span class="pill money">Mulai dari<b>' + (harga.length ? rp(Math.min.apply(null, harga)) : "nanya staff") + "</b></span>");
+    el("infoPills").innerHTML = pills.join("");
+}
+
+function update() {
+    const harga = hargaKelas();
+    el("sumHarga").textContent = harga ? rp(harga * state.durasi) : "nanya dulu";
+    const mulai = Number(el("bokStart").value || BUKA);
+    el("sumJam").textContent = jamLabel(mulai) + " – " + jamLabel(mulai + state.durasi);
+    el("msgPreview").textContent = pesan();
+    renderKelasKartu();
+
+    const problem = valid();
+    const num = waTarget();
+    const link = el("waSend");
+    link.href = waHref(pesan());
+    link.setAttribute("aria-disabled", String(!!problem || !num));
+    link.title = !num ? "Nomor WhatsApp warnet belum dipasang" : problem;
+    el("chatLink").href = waHref(chatPesan());
+    el("ownerWarn").hidden = !!num;
+}
+
+function pilihKelas(k) {
+    state.kelas = k;
+    state.pc = "";
+    renderKelas(); renderPc(); update();
+    el("bokCard").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => el("bokName").focus({ preventScroll: true }), 420);
+}
+
+/* ---------- event ---------- */
+el("kelasSeg").addEventListener("click", e => {
+    const b = e.target.closest("button[data-kelas]");
+    if (!b || b.dataset.kelas === state.kelas) return;
+    state.kelas = b.dataset.kelas;
+    state.pc = "";
+    renderKelas(); renderKelasKartu(); renderPc(); update();
+});
+
+el("hargaKartu").addEventListener("click", e => {
+    const b = e.target.closest("button[data-kelas]");
+    if (!b) return;
+    pilihKelas(b.dataset.kelas);
+});
+
+el("pcChips").addEventListener("click", e => {
+    const b = e.target.closest("button[data-pc]");
+    if (!b) return;
+    state.pc = b.dataset.pc;
+    renderPc(); update();
+});
+
+el("durChips").addEventListener("click", e => {
+    const b = e.target.closest("button[data-dur]");
+    if (!b) return;
+    state.durasi = Number(b.dataset.dur);
+    renderDurasi(); update();
+});
+
+el("topikChips").addEventListener("click", e => {
+    const b = e.target.closest("button[data-topik]");
+    if (!b) return;
+    state.topik = Number(b.dataset.topik);
+    renderTopik(); update();
+});
+
+["bokName", "bokPhone", "bokDate", "bokStart", "bokNote"].forEach(id => {
+    el(id).addEventListener("input", update);
+    el(id).addEventListener("change", update);
+});
+
+el("heroCta").addEventListener("click", () => {
+    el("bokCard").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => el("bokName").focus({ preventScroll: true }), 420);
+});
+
+el("waSend").addEventListener("click", e => {
+    if (!waTarget()) {
+        e.preventDefault();
+        return bokMsg("Nomor WhatsApp warnet belum dipasang, pakai tombol Salin pesan dulu ya.", false);
+    }
+    const problem = valid();
+    if (problem) {
+        e.preventDefault();
+        el(problem.includes("Nama") ? "bokName" : "bokPhone").focus();
+        return bokMsg(problem, false);
+    }
+    toast("WhatsApp-nya lagi kebuka. Kalau nggak kebalik, pencet sekali lagi ya.");
+});
+
+el("copyMsg").addEventListener("click", () => {
+    const text = pesan();
+    const done = () => bokMsg("Pesan udah kecopy. Tinggal paste di chat staff yang jaga.", true);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+    } else fallbackCopy(text, done);
+});
+
+function fallbackCopy(text, done) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); }
+    catch (e) { bokMsg("Nggak bisa nyalin otomatis, blok pesannya terus copy manual ya.", false); }
+    document.body.removeChild(ta);
+}
+
+function bokMsg(text, good) {
+    const h = el("bokMsg");
+    h.textContent = text;
+    h.style.color = good ? "var(--good)" : "var(--bad)";
+}
+
+/* ---------- jalanin ---------- */
+(function init() {
+    const date = el("bokDate");
+    const now = new Date();
+    const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    date.value = iso(now);
+    date.min = iso(now);
+    date.max = iso(new Date(now.getTime() + 30 * 86400000));
+
+    const start = el("bokStart");
+    let opts = "";
+    for (let h = BUKA; h <= TUTUP; h++) opts += '<option value="' + h + '">' + jamLabel(h) + "</option>";
+    start.innerHTML = opts;
+    /* jam yang paling sering diminta: malem */
+    start.value = String(Math.max(BUKA, Math.min(TUTUP, 19)));
+
+    renderKelas(); renderKelasKartu(); renderPc(); renderDurasi(); renderTopik(); renderInfo();
+    update();
+
+    const box = el("fx");
+    for (let i = 0; i < 18; i++) {
+        const s = document.createElement("span");
+        s.style.left = Math.random() * 100 + "%";
+        s.style.setProperty("--s", (3 + Math.random() * 5).toFixed(1) + "px");
+        s.style.setProperty("--d", (10 + Math.random() * 10).toFixed(1) + "s");
+        s.style.setProperty("--w", (-Math.random() * 16).toFixed(1) + "s");
+        s.style.setProperty("--x", ((Math.random() - .5) * 150).toFixed(0) + "px");
+        box.appendChild(s);
+    }
+})();
+</script>
+</body>
+</html>
